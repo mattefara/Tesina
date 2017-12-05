@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMOP - Smart Shop</string>
+    <string name="action_sign_in">Entra o registrati</string>
+    <string name="action_sign_in_short">Registrati</string>
+    <string name="error_field_required">Il campo non può essere vuoto</string>
+    <string name="error_incorrect_password">Password errata</string>
+    <string name="error_invalid_email">L\'email non è valida</string>
+    <string name="error_invalid_password">La password è troppo corta</string>
+    <string name="permission_rationale">Il permesso ai contatti è neccessario per poter mandare una mail</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (opzionale)</string>
+</resources>
