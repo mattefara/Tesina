@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/List_Test.iml" filepath="$PROJECT_DIR$/List_Test.iml" />
+      <module fileurl="file://C:\Users\matte\Documents\Scuola\Tesina\app_per_test\List_Test\List_Test.iml" filepath="C:\Users\matte\Documents\Scuola\Tesina\app_per_test\List_Test\List_Test.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\matte\Documents\Scuola\Tesina\app_per_test\List_Test\app\app.iml" filepath="C:\Users\matte\Documents\Scuola\Tesina\app_per_test\List_Test\app\app.iml" />
     </modules>
   </component>
 </project>
