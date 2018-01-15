@@ -1,4 +1,0 @@
-#Sun Jan 14 22:17:34 CET 2018
-base.0=C\:\\Users\\matte\\Desktop\\Tesina\\app per test\\List_Test\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
-path.0=classes.dex
-renamed.0=classes.dex
