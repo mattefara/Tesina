@@ -3,4 +3,6 @@
     <string name="intro_slider">Questo è un intro slider</string>
     <string name="next">Next</string>
     <string name="skip">Skip</string>
+    <string name="Sport">Sport</string>
+    <string name="Movies">Movies</string>
 </resources>

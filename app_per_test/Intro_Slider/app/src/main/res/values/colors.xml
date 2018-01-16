@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
     <color name="slider_1">#f64c73</color>
+    <color name="slider_2">#f56d38</color>
+    <color name="slider_3">#489dff</color>
+    <color name="slider_4">#7323dc</color>
 </resources>
