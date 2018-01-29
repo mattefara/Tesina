@@ -42,16 +42,6 @@ public class MainActivity extends AppCompatActivity {
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                /*try {
-                                    JSONArray jsonArray = new JSONArray(response);
-                                    String value = "";
-                                    for (int i=0; i<jsonArray.length(); i++){
-                                        value += jsonArray.get(i);
-                                    }
-                                    textView.setText(value);
-                                } catch (JSONException e) {
-                                    textView.setText("JSON format is incorrect");
-                                }*/
                                 JSONObject jsonObject = null;
                                 try {
                                     jsonObject = new JSONObject(response);
@@ -60,8 +50,6 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
-                                //textView.setText(response);
 
                             }
                         },
