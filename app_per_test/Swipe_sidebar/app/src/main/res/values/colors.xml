@@ -5,4 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="sideBarText">#757676</color>
     <color name="textWhite">#ffffff</color>
+
+    <color name="pressed"> #666666 </color>
+    <color name="relased"> #999999</color>
+
+    <color name="white">#FFFFFF</color>
 </resources>
