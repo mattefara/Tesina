@@ -29,9 +29,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Oggetto o = list.get(position);
-        holder.name.setText(o.getNome());
-        holder.lastName.setText(o.getCognome());
+            Oggetto o = list.get(position);
+            holder.name.setText(o.getNome());
+            holder.imageView.setImageResource(o.getImg());
     }
 
     @Override
@@ -41,15 +41,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, lastName, textViewRating, textViewPrice;
-        ImageView imageView;
+            TextView name, lastName, textViewRating, textViewPrice;
+            ImageView imageView;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+            public ViewHolder(View itemView) {
+                super(itemView);
 
-            name = itemView.findViewById(R.id.last_name);
-            lastName = itemView.findViewById(R.id.name);
-            }
+                name = itemView.findViewById(R.id.name);
+                imageView = itemView.findViewById(R.id.last_name);
+                }
         }
 
 

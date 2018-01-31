@@ -6,11 +6,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class Oggetto {
-   private String nome, cognome;
+   private String nome;
+   private int img;
 
-    public Oggetto(String nome, String cognome) {
+    public Oggetto(String nome, int img) {
         this.nome = nome;
-        this.cognome = cognome;
+        this.img = img;
     }
 
     public String getNome() {
@@ -21,11 +22,11 @@ public class Oggetto {
         this.nome = nome;
     }
 
-    public String getCognome() {
-        return cognome;
+    public int getImg() {
+        return img;
     }
 
-    public void setCognome(String cognome) {
-        this.cognome = cognome;
+    public void setImg(int img) {
+        this.img = img;
     }
 }
