@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Better_Sidebar.iml" filepath="$PROJECT_DIR$/Better_Sidebar.iml" />
+      <module fileurl="file://C:\Users\matte\Documents\Scuola\Tesina\app_per_test\Better_Sidebar\Better_Sidebar.iml" filepath="C:\Users\matte\Documents\Scuola\Tesina\app_per_test\Better_Sidebar\Better_Sidebar.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\matte\Documents\Scuola\Tesina\app_per_test\Better_Sidebar\app\app.iml" filepath="C:\Users\matte\Documents\Scuola\Tesina\app_per_test\Better_Sidebar\app\app.iml" />
     </modules>
   </component>
 </project>
