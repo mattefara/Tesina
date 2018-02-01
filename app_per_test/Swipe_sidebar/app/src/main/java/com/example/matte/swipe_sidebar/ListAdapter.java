@@ -23,9 +23,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.sidebar_list_item, null);
-        return new ViewHolder(view);
+        View rootView = LayoutInflater.from(context).inflate(R.layout.sidebar_list_item, null, false);
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        rootView.setLayoutParams(lp);
+        return new ViewHolder(rootView);
     }
 
     @Override
@@ -33,8 +34,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         SidebarAction action = product.get(position);
         holder.actionName.setText(action.getActionName());
         holder.icon.setImageResource(action.getIcon());
-        //Log.i("Oggetto",action.getItem2());
-        //holder.immagine.setImageResource(o.getImage());
     }
 
     @Override

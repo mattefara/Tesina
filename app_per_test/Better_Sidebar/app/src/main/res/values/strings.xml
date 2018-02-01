@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Better_Sidebar</string>
+    <string name="home">Home</string>
+    <string name="info">Info</string>
+    <string name="user">Utente</string>
+    <string name="places">Sedi</string>
+    <string name="settings">Impostazioni</string>
+    <string name="updates">Controlla aggiornamenti</string>
+</resources>
