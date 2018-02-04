@@ -24,11 +24,14 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +52,8 @@ import static android.Manifest.permission.READ_CONTACTS;
 
 public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    Button transition;
+
     final String SERVER_URL = "http://smopapp.altervista.org/login.php";
 
     AutoCompleteTextView email;
@@ -60,6 +65,15 @@ public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Curs
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smop_login);
 
+        transition = (Button) findViewById(R.id.transition);
+
+        transition.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+
+            }
+        });
+
         email = (AutoCompleteTextView) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.login_progress);
@@ -69,39 +83,42 @@ public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Curs
         signIn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String strEmail = email.getText().toString();
-                final String strPassword = password.getText().toString();
-                if (!isMailCorrect(strEmail) || !isPasswordCorrect(strPassword)) { return;}
-                progressBar.setVisibility(View.VISIBLE);
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER_URL,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Toast.makeText(getApplicationContext(),response,Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                error.printStackTrace();
-                                Toast.makeText(getApplicationContext(), "Qualcosa è andato storto: " + error.networkResponse,Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
-                            }
-                        }){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String,String> data = new HashMap<>();
-                        data.put("username",strEmail);
-                        data.put("password",strPassword);
-                        return data;
-                    }
-                };
-                LoginSingleton.getMySingletonInstance(SmopLogin.this).addToRequestQue(stringRequest);
-
-
+                atteptLogin();
             }
         });
 
+    }
+
+    private void atteptLogin() {
+        final String strEmail = email.getText().toString();
+        final String strPassword = password.getText().toString();
+        if (!isMailCorrect(strEmail) || !isPasswordCorrect(strPassword)) { return;}
+        progressBar.setVisibility(View.VISIBLE);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(),response,Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Qualcosa è andato storto: " + error.networkResponse,Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> data = new HashMap<>();
+                data.put("action","Sign-in");
+                data.put("username",strEmail);
+                data.put("password",strPassword);
+                return data;
+            }
+        };
+        LoginSingleton.getMySingletonInstance(SmopLogin.this).addToRequestQue(stringRequest);
     }
 
     private boolean isPasswordCorrect(String strPassword){
