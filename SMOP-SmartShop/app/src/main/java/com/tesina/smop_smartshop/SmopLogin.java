@@ -3,7 +3,9 @@ package com.tesina.smop_smartshop;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -51,8 +53,7 @@ import java.util.Map;
 import static android.Manifest.permission.READ_CONTACTS;
 
 public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Cursor> {
-
-    Button transition;
+    TextView transition;
 
     final String SERVER_URL = "http://smopapp.altervista.org/login.php";
 
@@ -65,12 +66,14 @@ public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Curs
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smop_login);
 
-        transition = (Button) findViewById(R.id.transition);
+        transition = (TextView) findViewById(R.id.transition);
 
         transition.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-
+                Intent intent = new Intent(SmopLogin.this,ProvaIntent.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
 
