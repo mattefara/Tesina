@@ -52,26 +52,35 @@ import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
+/*
+* todo: mettere la conessione al server con conseguenti rispooste i una classe a parte per essere disponibile in modo migliore
+* todo: costruttore della classe sa StringRequest = ...
+* todo: agguingere nella smop register la connessione al database + test
+* */
+
 public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Cursor> {
-    TextView transition;
+
+    final boolean ADMIN_LOGIN = true;
+
 
     final String SERVER_URL = "http://smopapp.altervista.org/login.php";
-
+    TextView register;
     AutoCompleteTextView email;
     EditText password;
     Button signIn;
     ProgressBar progressBar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smop_login);
 
-        transition = (TextView) findViewById(R.id.transition);
+        register = (TextView) findViewById(R.id.transition);
 
-        transition.setOnClickListener(new OnClickListener() {
+        register.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Intent intent = new Intent(SmopLogin.this,ProvaIntent.class);
+                Intent intent = new Intent(SmopLogin.this,SmopRegister.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
@@ -86,7 +95,12 @@ public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Curs
         signIn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                atteptLogin();
+                if (ADMIN_LOGIN){
+                    startMainActivity();
+                } else {
+                    atteptLogin();
+                }
+
             }
         });
 
@@ -95,53 +109,64 @@ public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Curs
     private void atteptLogin() {
         final String strEmail = email.getText().toString();
         final String strPassword = password.getText().toString();
-        if (!isMailCorrect(strEmail) || !isPasswordCorrect(strPassword)) { return;}
+        if (!isInputCorrect()) {
+            return;
+        }
         progressBar.setVisibility(View.VISIBLE);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(),response,Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
+                        if (response.equals("true")) {
+                            startMainActivity();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "L'account non esiste", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Qualcosa è andato storto: " + error.networkResponse,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Qualcosa è andato storto: " + error.networkResponse, Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> data = new HashMap<>();
-                data.put("action","Sign-in");
-                data.put("username",strEmail);
-                data.put("password",strPassword);
+                Map<String, String> data = new HashMap<>();
+                data.put("action", "sign_in");
+                data.put("username", strEmail);
+                data.put("password", strPassword);
                 return data;
             }
         };
         LoginSingleton.getMySingletonInstance(SmopLogin.this).addToRequestQue(stringRequest);
     }
 
-    private boolean isPasswordCorrect(String strPassword){
-        if (!isPasswordLengthCorrect(strPassword)){
+    private void startMainActivity() {
+        Intent correctLogin = new Intent(SmopLogin.this, MainActivity.class);
+        startActivity(correctLogin);
+    }
+
+    public boolean isInputCorrect() {
+        boolean checked = true;
+
+        if (!isPasswordLengthCorrect(password.getText().toString())){
             password.setError(getResources().getString(R.string.error_invalid_password));
-            return false;
+            checked = false;
         }
-        return true;
+
+        if (!isMailContainsCharacter(email.getText().toString())){
+            email.setError(getResources().getString(R.string.error_invalid_email));
+            checked = false;
+        }
+
+        return checked;
     }
 
     private boolean isPasswordLengthCorrect(String password){
         return  password.length() >= 6;
-    }
-
-    private boolean isMailCorrect(String strEmail) {
-        if (!isMailContainsCharacter(strEmail)){
-            email.setError(getResources().getString(R.string.error_invalid_email));
-            return false;
-        }
-        return true;
     }
 
     private boolean isMailContainsCharacter(String mail){
@@ -166,5 +191,12 @@ public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Curs
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+
+    @Override
+    public void onBackPressed() {
+        this.finishAffinity();
+    }
+
+
 }
 
