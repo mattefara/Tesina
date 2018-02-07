@@ -3,7 +3,9 @@ package com.tesina.smop_smartshop;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -32,6 +34,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -60,23 +63,25 @@ import static android.Manifest.permission.READ_CONTACTS;
 
 public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-    final boolean ADMIN_LOGIN = true;
-
-
-    final String SERVER_URL = "http://smopapp.altervista.org/login.php";
     TextView register;
     AutoCompleteTextView email;
     EditText password;
     Button signIn;
+    CheckBox remberMe;
     ProgressBar progressBar;
+    Context context;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smop_login);
 
-        register = (TextView) findViewById(R.id.transition);
+        if (isLoginAlreadyDone()){
+            SharedPreferences userInformations = getApplicationContext().getSharedPreferences("SignIn",Context.MODE_PRIVATE);
+            startMainActivity(userInformations.getString("username",""));
+        }
 
+        register = (TextView) findViewById(R.id.register);
         register.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -86,26 +91,24 @@ public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Curs
             }
         });
 
+        remberMe = (CheckBox) findViewById(R.id.remember_me);
         email = (AutoCompleteTextView) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.login_progress);
 
         signIn = (Button) findViewById(R.id.email_sign_in_button);
+        context = getApplicationContext();
 
         signIn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ADMIN_LOGIN){
-                    startMainActivity();
-                } else {
-                    atteptLogin();
-                }
-
+                atteptLogin();
             }
         });
 
     }
 
+    //This method try to log in
     private void atteptLogin() {
         final String strEmail = email.getText().toString();
         final String strPassword = password.getText().toString();
@@ -113,40 +116,63 @@ public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Curs
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, SERVER_URL,
-                new Response.Listener<String>() {
+
+        //This class connect the app with the database anc sends data
+        DatabaseConnection databaseConnection = new DatabaseConnection(new String[]{"action","username","password"}, new String[]{"sign_in",strEmail,strPassword},getApplicationContext()){
+            @Override
+            public Response.Listener responseListener() {
+                Response.Listener<String> stringListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         progressBar.setVisibility(View.GONE);
                         if (response.equals("true")) {
-                            startMainActivity();
+                            if (remberMe.isChecked()){
+                                setRememberMe(true,email.getText().toString());
+                            }
+                            startMainActivity(email.getText().toString());
                         } else {
                             Toast.makeText(getApplicationContext(), "L'account non esiste", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Qualcosa è andato storto: " + error.networkResponse, Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
+                };
+                return stringListener;
             }
-        }) {
+
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> data = new HashMap<>();
-                data.put("action", "sign_in");
-                data.put("username", strEmail);
-                data.put("password", strPassword);
-                return data;
+            public Response.ErrorListener errorResponseListener() {
+                Response.ErrorListener errorListener = new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Qualcosa è andato storto: " + error.networkResponse, Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                    }
+                };
+                return errorListener;
             }
         };
-        LoginSingleton.getMySingletonInstance(SmopLogin.this).addToRequestQue(stringRequest);
+        databaseConnection.startConnection();
     }
 
-    private void startMainActivity() {
-        Intent correctLogin = new Intent(SmopLogin.this, MainActivity.class);
-        startActivity(correctLogin);
+    private void startMainActivity(String account) {
+        Intent launchMainActivity = new Intent(SmopLogin.this, MainActivity.class);
+        launchMainActivity.putExtra("username",account);
+        startActivity(launchMainActivity);
+        finishAffinity();
+    }
+
+    public boolean isLoginAlreadyDone() {
+        SharedPreferences loginDone = getApplicationContext().getSharedPreferences("SignIn",Context.MODE_PRIVATE);
+        boolean x = loginDone.getBoolean("rememberMe",false);
+        return loginDone.getBoolean("rememberMe", false);
+    }
+
+    private void setRememberMe( boolean remember, String account) {
+        SharedPreferences rememberLogin = getApplicationContext().getSharedPreferences("SignIn",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = rememberLogin.edit();
+        editor.putBoolean("rememberMe",remember);
+        editor.putString("username",account);
+        editor.commit();
     }
 
     public boolean isInputCorrect() {
@@ -197,6 +223,4 @@ public class SmopLogin extends AppCompatActivity implements LoaderCallbacks<Curs
         this.finishAffinity();
     }
 
-
 }
-

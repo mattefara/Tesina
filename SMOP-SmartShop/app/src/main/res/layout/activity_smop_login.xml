@@ -89,15 +89,26 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="8dp"
                 android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/transition"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/sign_up"
-                android:textColor="@color/colorPrimary"
-                android:paddingTop="10dp"/>
+                android:layout_height="wrap_content">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/remember_me"
+                    android:text="@string/remember_me"/>
+
+                <TextView
+                    android:id="@+id/register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="end"
+                    android:paddingTop="10dp"
+                    android:text="@string/sign_up"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
 
 
         </LinearLayout>

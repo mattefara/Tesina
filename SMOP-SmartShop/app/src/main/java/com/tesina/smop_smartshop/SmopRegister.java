@@ -1,11 +1,16 @@
 package com.tesina.smop_smartshop;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Response;
 
 public class SmopRegister extends AppCompatActivity {
     TextView name, lastname, email, password;
@@ -25,16 +30,52 @@ public class SmopRegister extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkInput()){
-                    atteptLogin();
-                }
+                register();
             }
         });
 
 
     }
 
-    private void atteptLogin() {
+    private void register() {
+        if (checkInput()){
+            DatabaseConnection databaseConnection = new DatabaseConnection(
+                    new String[]{"action","email","password","name","lastName"},
+                    new String[]{"sign_up",email.getText().toString(), password.getText().toString(),name.getText().toString(),lastname.getText().toString()},
+                    getApplicationContext()
+            ){
+                @Override
+                public Response.Listener responseListener() {
+                    Response.Listener<String> response = new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            Toast.makeText(getApplicationContext(),response,Toast.LENGTH_SHORT).show();
+                            setRememberMe();
+                            startMainActivity();
+                        }
+                    };
+                    return response;
+                }
+            };
+            databaseConnection.startConnection();
+        }
+    }
+
+    private void setRememberMe() {
+        SharedPreferences rememberSignUp = getApplicationContext().getSharedPreferences("SignIn", Context.MODE_PRIVATE);
+        SharedPreferences.Editor data = rememberSignUp.edit();
+        data.putBoolean("rememberMe",true);
+        data.putString("username",email.getText().toString());
+        data.putString("name",name.getText().toString());
+        data.putString("lastname",name.getText().toString());
+        data.commit();
+    }
+
+    private void startMainActivity() {
+        Intent mainActivity = new Intent(SmopRegister.this, MainActivity.class);
+        startActivity(mainActivity);
+        finish();
     }
 
     private boolean checkInput() {
