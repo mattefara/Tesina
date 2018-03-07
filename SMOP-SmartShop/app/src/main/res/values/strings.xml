@@ -23,5 +23,24 @@
 
 
     <string name="settings">Settings</string>
-    <string name="remember_me">Remember me</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="error_passwrd_not_equal">Passwords are different or this fiel is empty</string>
+    <string name="empy_fiels">This cannot be empty</string>
+    <string name="error_duplicate_email">This email has been used</string>
+    <string name="logout">Logout</string>
+    <string name="product_name">Insert product name</string>
+    <string name="shop">Shop</string>
+    <string name="branding">Marca:</string>
+    <string name="ingredients">Ingredienti:</string>
+    <string name="details">Descrizione</string>
+    <string name="discount">Sconto:</string>
+    <string name="quantity">Quantità:</string>
+    <string name="barcode">Barcode:</string>
+    <string name="price">50.00</string>
+    <string name="money">€</string>
+    <string name="perc">%</string>
+    <string name="pices">3</string>
+    <string name="error_login">This password is wrong</string>
+    <string name="error_login_email">This account doesn\'t exists</string>
+    <string name="email_already_used">This email is already used</string>
 </resources>

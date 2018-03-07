@@ -8,14 +8,14 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.tesina.smop_smartshop.SmopLogin"
+    tools:context="com.tesina.smop_smartshop.Login"
     android:orientation="vertical">
 
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -89,26 +89,20 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="8dp"
                 android:visibility="gone" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/remember_me"
-                    android:text="@string/remember_me"/>
 
                 <TextView
                     android:id="@+id/register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
-                    android:gravity="end"
+                    android:gravity="center"
                     android:paddingTop="10dp"
                     android:text="@string/sign_up"
                     android:textColor="@color/colorPrimary" />
             </LinearLayout>
-
 
 
         </LinearLayout>

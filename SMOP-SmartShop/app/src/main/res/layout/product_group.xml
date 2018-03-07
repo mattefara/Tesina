@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/FontGroup">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_product"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/product_group_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prodotto"
+            style="@style/FontGroup"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_product">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pz: "
+            style="@style/FontGroup"/>
+        <TextView
+            android:id="@+id/group_price"
+            style="@style/FontGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/price" />
+
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/FontGroup"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:text="@string/money" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            style="@style/FontGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q.ta: " />
+
+        <TextView
+            android:id="@+id/group_quantity"
+            style="@style/FontGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pices" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layout_discount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_product">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scn:"
+            style="@style/FontGroup"/>
+        <TextView
+            android:id="@+id/group_discount"
+            style="@style/FontGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/price" />
+
+        <TextView
+            android:id="@+id/textView4"
+            style="@style/FontGroup"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:text="@string/perc" />
+    </LinearLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>
