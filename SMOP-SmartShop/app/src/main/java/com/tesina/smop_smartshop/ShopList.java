@@ -10,11 +10,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.internal.li;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,7 +30,7 @@ public class ShopList extends Fragment {
     Context context;
     int count_item;
 
-    DatabaseReference productReference;
+    DatabaseReference listReference;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     ExpandableListView shopList;
@@ -56,7 +57,7 @@ public class ShopList extends Fragment {
             }
         });
 
-        productReference = database.getReference("users/"+userUid+"/lists/");
+        listReference = database.getReference("users/"+userUid+"/lists/").push();
 
 
         return view;
@@ -70,9 +71,9 @@ public class ShopList extends Fragment {
         count_item = 1;
 
         //set buttons and other alert things
-        ImageView add = (ImageView) dialogView.findViewById(R.id.add_one_item);
-        ImageView remove = (ImageView) dialogView.findViewById(R.id.remove_one_item);
-        final TextView countItem = (TextView) dialogView.findViewById(R.id.number_of_item_to_add);
+        ImageView add = dialogView.findViewById(R.id.add_one_item);
+        ImageView remove = dialogView.findViewById(R.id.remove_one_item);
+        final TextView countItem = dialogView.findViewById(R.id.number_of_item_to_add);
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +113,7 @@ public class ShopList extends Fragment {
     }
 
     private void addData() {
-        String name = "Speghetti";
+        String name = "Spaghetti";
         double price = 1.32;
         String branding = "brand";
         String ingr = "ingr";
@@ -127,7 +128,7 @@ public class ShopList extends Fragment {
         productDetails.add(new ProductDetails(branding,ingr,desc,barcode,disc,quantity));
 
         listHashMap.put(groupProductInformation.get(groupProductInformation.size()-1),productDetails);
-
-        productReference.setValue(new Product(name,branding,ingr,desc,barcode,quantity,price,disc));
+        DatabaseReference productsReference  = listReference.push();
+        productsReference.setValue(new Product(name,branding,ingr,desc,barcode,quantity,price,disc));
     }
 }

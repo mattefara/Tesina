@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "789804015671-l3i8mufrmfg9a93seh0fgltjk5jt7e98.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tesina.smop_smartshop",
+            "certificate_hash": "66f39a24716f22f5d09dbe3943fe60dd2734a41b"
+          }
+        },
+        {
           "client_id": "789804015671-d3bh2b9qnhplgp74m0pkkjeg70qvvtoj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
