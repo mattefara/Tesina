@@ -6,7 +6,8 @@
     android:paddingBottom="20dp"
     android:background="@color/colorPrimaryDark"
     android:layout_width="match_parent"
-    android:layout_height="190dp">
+    android:layout_height="190dp"
+    android:id="@+id/nav_header">
 
     <ImageView
         android:src="@drawable/ic_person"
@@ -15,7 +16,7 @@
         android:layout_weight="1"
         android:layout_height="0dp" />
     <TextView
-        android:id="@+id/tv_email"
+        android:id="@+id/nav_user_email"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:layout_gravity="center"

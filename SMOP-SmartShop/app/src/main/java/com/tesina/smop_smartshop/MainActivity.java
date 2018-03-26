@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +23,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     int previousActivity = R.id.shop;
+
+    TextView navUserEmail;
 
     private FirebaseAuth authentication;
     FirebaseUser currentUser;
@@ -43,6 +46,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sidebar = (NavigationView) findViewById(R.id.sidebar);
         if (sidebar != null){ sidebar.setNavigationItemSelectedListener(this); }
 
+        View sidebarView =  sidebar.getHeaderView(0);
+        navUserEmail = (TextView) sidebarView.findViewById(R.id.nav_user_email);
+
+
+
 
     }
 
@@ -55,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame,new ShopList()).commit();
+            navUserEmail.setText(currentUser.getEmail());
         }
     }
 

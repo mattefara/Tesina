@@ -66,9 +66,9 @@ public class ShopList extends Fragment {
 
     private void buildDialog(LayoutInflater inflater) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        View dialogView = inflater.inflate(R.layout.dialog_add_item, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_add_item, null);
 
-        count_item = 1;
+        count_item = 0;
 
         //set buttons and other alert things
         ImageView add = dialogView.findViewById(R.id.add_one_item);
@@ -94,7 +94,7 @@ public class ShopList extends Fragment {
         builder.setPositiveButton("Conferma", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                addData();
+                addData(dialogView);
                 shopList.setAdapter(new ExpandableShopListAdapter(context,groupProductInformation,listHashMap));
 
             }
@@ -112,7 +112,7 @@ public class ShopList extends Fragment {
         dialog.show();
     }
 
-    private void addData() {
+    private void addData(View view) {
         String name = "Spaghetti";
         double price = 1.32;
         String branding = "brand";
