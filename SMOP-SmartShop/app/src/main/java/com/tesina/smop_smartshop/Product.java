@@ -1,8 +1,11 @@
 package com.tesina.smop_smartshop;
 
-/**
- * Created by matte on 07/03/2018.
- */
+
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 class Product {
     String productName, branding, ingredients, description, barcode;
@@ -18,5 +21,9 @@ class Product {
         this.quantity = quantity;
         this.price = price;
         this.discount = discount;
+    }
+
+    public String toString(){
+        return this.productName + "," + this.branding + "," + this.ingredients + "," + this.description  + "," + this.barcode + "," + this.quantity + "," + this.price  + "," + this.discount + ";" ;
     }
 }

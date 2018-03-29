@@ -72,7 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/product_ingredients"
         style="@style/FontChild"/>
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tx4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
         android:text="@string/quantity"
         app:layout_constraintStart_toEndOf="@+id/tx5"
         app:layout_constraintTop_toBottomOf="@+id/product_discount"
-        style="@style/FontChild"/>
+        style="@style/FontChild"/>-->
 
     <TextView
         android:id="@+id/tx6"
@@ -124,7 +124,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/barcode"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tx5"
+        app:layout_constraintTop_toBottomOf="@+id/tx3"
         style="@style/FontChild"/>
 
     <TextView
@@ -134,8 +134,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/barcode"
-        app:layout_constraintStart_toEndOf="@+id/tx5"
-        app:layout_constraintTop_toBottomOf="@+id/product_quantity"
+        app:layout_constraintStart_toEndOf="@+id/tx6"
+        app:layout_constraintTop_toBottomOf="@+id/product_details"
         style="@style/FontChild"/>
 
 

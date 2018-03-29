@@ -6,11 +6,14 @@ package com.tesina.smop_smartshop;
 
 public class ProductGroup {
     private String productName;
-    private double price;
+    private double price, discount;
+    private int quantity;
 
-    public ProductGroup(String productName, double price) {
+    public ProductGroup(String productName, double price, int quantity, double discount) {
         this.productName = productName;
         this.price = price;
+        this.discount = discount;
+        this.quantity = quantity;
     }
 
     public String getProductName() {
@@ -27,5 +30,25 @@ public class ProductGroup {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

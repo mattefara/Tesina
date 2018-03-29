@@ -69,8 +69,12 @@ public class ExpandableShopListAdapter extends BaseExpandableListAdapter {
         }
         TextView name = convertView.findViewById(R.id.product_group_name);
         TextView price = convertView.findViewById(R.id.group_price);
+        TextView quantity = convertView.findViewById(R.id.group_quantity);
+        TextView discount = convertView.findViewById(R.id.group_discount);
         name.setText(group.getProductName());
         price.setText(String.valueOf(group.getPrice()));
+        quantity.setText(String.valueOf(group.getQuantity()));
+        discount.setText(String.valueOf(group.getDiscount()));
         return convertView;
     }
 
@@ -85,14 +89,10 @@ public class ExpandableShopListAdapter extends BaseExpandableListAdapter {
         TextView branding = convertView.findViewById(R.id.product_branding);
         TextView details = convertView.findViewById(R.id.product_details);
         TextView barCode = convertView.findViewById(R.id.product_barcode);
-        TextView quantity = convertView.findViewById(R.id.product_quantity);
-        TextView discount = convertView.findViewById(R.id.product_discount);
 
         ingredients.setText(child.getIngredients());
         branding.setText(child.getBranding());
         details.setText(child.getDescription());
-        quantity.setText(String.valueOf(child.getQuantity()));
-        discount.setText(String.valueOf(child.getDiscount()));
         barCode.setText(child.getBarCode());
         return convertView;
     }
