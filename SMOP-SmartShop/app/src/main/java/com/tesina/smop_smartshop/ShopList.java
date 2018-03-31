@@ -9,10 +9,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -36,12 +40,14 @@ import java.util.StringTokenizer;
 
 public class ShopList extends Fragment {
     final String LIST_FILE_NAME = "list.txt";
+    private String[] products = new String[]{"Pasta", "Spaghetti"};
 
     View view;
     Context context;
     int count_item;
 
     DatabaseReference listReference;
+    DatabaseReference productReference;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     ExpandableListView shopList;
@@ -77,11 +83,14 @@ public class ShopList extends Fragment {
         });
 
         listReference = database.getReference("users/"+userUid+"/lists/").push();
+        productReference = database.getReference("products/");
 
         loadData();
 
         return view;
     }
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,6 +109,32 @@ public class ShopList extends Fragment {
         //set buttons and other alert things
         ImageView add = dialogView.findViewById(R.id.add_one_item);
         ImageView remove = dialogView.findViewById(R.id.remove_one_item);
+        ImageView dropDownProductName = dialogView.findViewById(R.id.dropdown_add_product);
+        final AutoCompleteTextView productToAdd = dialogView.findViewById(R.id.add_product);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,android.R.layout.simple_dropdown_item_1line,products);
+        productToAdd.setAdapter(adapter);
+
+        dropDownProductName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                productToAdd.showDropDown();
+            }
+        });
+
+        productToAdd.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                //Log.i("KeyListener:",view.toString());
+                //Log.i("KeyListener:", String.valueOf(i));
+                if (keyEvent.getAction() == 1){
+                    Query query = productReference.equalTo(productToAdd.getText().toString());
+                    Toast.makeText(context,query.toString(),Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        });
+
         final TextView countItem = dialogView.findViewById(R.id.number_of_item_to_add);
 
         add.setOnClickListener(new View.OnClickListener() {
