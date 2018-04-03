@@ -1,4 +1,5 @@
 firebase-functions/functions/node_modules/
+testing-firebase-functions/functions/node_modules/
 app_per_test/BarCode_Camera/
 app_per_test/Better_Sidebar/
 app_per_test/Database_Connection/
@@ -8,4 +9,5 @@ app_per_test/List_Test/
 app_per_test/Personalizza_Tema/
 app_per_test/Swipe_sidebar/
 app_per_test/FirebaseConnectionDemo/
+
 

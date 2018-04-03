@@ -84,7 +84,7 @@ public class ShopList extends Fragment {
 
         listReference = database.getReference("users/"+userUid+"/lists/").push();
         productReference = database.getReference("products/");
-
+        //productReference.setValue(new Product("Maionese tubetto 100g","Calvè","Uova","Maionese Calvè prodotta del 1980","ABC123",5,1.15,5));
         loadData();
 
         return view;
