@@ -1,21 +1,15 @@
 package com.example.matte.barcode_camera;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.SparseArray;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.CameraSource;
@@ -81,13 +75,13 @@ public class ScanBarcodeActivity extends Activity {
 
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
-                final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+                /*final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() > 0) {
                     Intent intent = new Intent();
                     intent.putExtra("Barcode", barcodes.valueAt(0));
                     setResult(CommonStatusCodes.SUCCESS, intent);
                     finish();
-                }
+                }*/
             }
         });
     }

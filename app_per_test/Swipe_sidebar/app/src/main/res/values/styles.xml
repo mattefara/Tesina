@@ -1,11 +1,14 @@
 <resources>
 
 
-
     <style name="CustomToolbar" parent="Theme.AppCompat.Light">
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/white</item>
     </style>
+
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>

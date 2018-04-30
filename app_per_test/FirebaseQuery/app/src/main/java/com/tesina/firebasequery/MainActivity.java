@@ -5,12 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +30,7 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText textToFind;
+    AutoCompleteTextView textToFind;
     Button search;
     FirebaseDatabase database;
     DatabaseReference reference;
@@ -56,21 +58,32 @@ public class MainActivity extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                functions.getHttpsCallable(checkRightFunction(4)).call()
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("text","p");
+                functions.getHttpsCallable("like").call(data)
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.i("ERRORE!!!",e.getMessage());
                         }
                     })
+                    /*.addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                                               @Override
+                                               public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                                                   ArrayList x = (ArrayList) httpsCallableResult.getData();
+                                                   toast(httpsCallableResult.toString());
+                                               }
+                                           })*/
                     .addOnCompleteListener(new OnCompleteListener<HttpsCallableResult>() {
                         @Override
-                        public void onComplete(@NonNull Task<HttpsCallableResult> task) {
-
+                        public void onComplete(Task<HttpsCallableResult> task) {
+                            //Object response = task.getResult().getData();
+                            ArrayList response = (ArrayList) task.getResult().getData();
+                            //String response = (String) task.getResult().getData();
+                            toast(response.toString());
                             /* Funziona con la funzione1
                             String response = (String) task.getResult().getData();
                             Log.i("Messaggio", response);*/
-
                             /* Funziona con la funzione2
                             HashMap<String, Object> o = (HashMap<String, Object>) task.getResult().getData();
                             for (String key: o.keySet()){
@@ -101,8 +114,14 @@ public class MainActivity extends AppCompatActivity {
                                     Log.i("Risposta " + key, String.valueOf(o));
                                 }
                             }*/
+                            /*}*/
+
+
                         }
                     });
+
+
+
                 /*Query resultQuery = reference.orderByChild("barcode").equalTo(textToFind.getText().toString());
                 resultQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

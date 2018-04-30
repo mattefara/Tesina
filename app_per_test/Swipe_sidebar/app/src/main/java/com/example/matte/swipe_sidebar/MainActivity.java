@@ -1,99 +1,110 @@
 package com.example.matte.swipe_sidebar;
 
-<<<<<<< HEAD
-import android.app.Activity;
-import android.graphics.Color;
-import android.os.Build;
-=======
->>>>>>> 2d749bf9af4d0388e3cfe1fdb8d345b51be308b4
-import android.support.v4.widget.DrawerLayout;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-<<<<<<< HEAD
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-=======
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
->>>>>>> 2d749bf9af4d0388e3cfe1fdb8d345b51be308b4
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity {
-    List<SidebarAction> actions;
-    private DrawerLayout drawerLayout;
-    private RecyclerView listView;
-    final private String[] ACTION_MESSAGES = new String[] {"Home", "Info", "Utente", "Sedi", "Impostazioni"};
-    final private int[] ICONS = new int[]{R.drawable.ic_home,R.drawable.ic_info,R.drawable.ic_account_circle,R.drawable.ic_place,R.drawable.ic_settings};
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setStatusBarTransparent();
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-        listView = findViewById(R.id.list);
-        listView.setHasFixedSize(true);
-        listView.setLayoutManager(new LinearLayoutManager(this));
-
-        actions = new ArrayList<>();
-        for (int i=0; i<ACTION_MESSAGES.length;i++){
-            SidebarAction p = new SidebarAction(ACTION_MESSAGES[i],ICONS[i]);
-            actions.add(p);
-        }
-        Log.i("Array",actions.toString());
-        ListAdapter lista = new ListAdapter(actions,getApplicationContext());
-
-        listView.setAdapter(lista);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
-<<<<<<< HEAD
-    private void setStatusBarTransparent(){
-        if (Build.VERSION.SDK_INT >= 21){
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            Window w = getWindow();
-            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            w.setStatusBarColor(Color.TRANSPARENT);
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
-=======
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu,menu);
-        return super.onCreateOptionsMenu(menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Toast.makeText(getApplicationContext(),"x",Toast.LENGTH_SHORT).show();
-        switch (item.getItemId()) {
-            case R.id.action_setting:
-                Toast.makeText(getApplicationContext(),"x",Toast.LENGTH_SHORT).show();
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
->>>>>>> 2d749bf9af4d0388e3cfe1fdb8d345b51be308b4
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        FragmentManager manager = getFragmentManager();
+
+        if (id == R.id.nav_camera) {
+            Fragment fragment = new ChildActivity();
+            manager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }
