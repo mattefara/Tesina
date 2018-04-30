@@ -1,5 +1,7 @@
-firebase-functions/functions/node_modules/
+smop_firebase_functions/node_modules/
+smop_firebase_functions/functions/node_modules/
 testing-firebase-functions/functions/node_modules/
+testing-firebase-functions/node_modules/
 app_per_test/BarCode_Camera/
 app_per_test/Better_Sidebar/
 app_per_test/Database_Connection/
