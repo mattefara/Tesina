@@ -31,7 +31,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:15.0.0'
     implementation 'com.google.firebase:firebase-database:15.0.0'
     implementation 'com.google.firebase:firebase-storage:15.0.0'
+    //Round image
     implementation 'de.hdodenhof:circleimageview:2.1.0'
+    //Expansion material panel
+    implementation 'com.github.florent37:expansionpanel:1.1.1'
+    //RecyclerView library
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

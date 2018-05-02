@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +43,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import tesina.smop_smart_shop.Adapter.ExpandableShopListAdapter;
+import tesina.smop_smart_shop.Adapter.ShopListAdapter;
+import tesina.smop_smart_shop.Products.ListProduct;
 import tesina.smop_smart_shop.Products.Product;
 import tesina.smop_smart_shop.Products.ProductDetails;
 import tesina.smop_smart_shop.Products.ProductGroup;
@@ -60,9 +65,10 @@ public class ShopList extends Fragment {
     DatabaseReference productReference;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     String userUid;
-    ExpandableListView shopList;
-    List<ProductGroup> groupProductInformation;
-    HashMap<ProductGroup, List<ProductDetails>> listHashMap;
+    RecyclerView shopList;
+    List<ListProduct> list;
+    //List<ProductGroup> groupProductInformation;
+    //HashMap<ProductGroup, List<ProductDetails>> listHashMap;
 
     FloatingActionButton addItem, deleteList;
 
@@ -70,15 +76,40 @@ public class ShopList extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         //Init data
-        if (FirebaseAuth.getInstance().getCurrentUser() == null){ startActivity(new Intent(context,Login.class)); }
-        userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if (FirebaseAuth.getInstance().getCurrentUser() == null){
+            startActivity(new Intent(context,Login.class));
+        } else {
+            userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
         view = inflater.inflate(R.layout.activity_make_list,container,false);
         addItem = view.findViewById(R.id.add_one_item);
         deleteList = view.findViewById(R.id.deleteList);
         shopList = view.findViewById(R.id.shop_list);
 
-        listHashMap = new HashMap<>();
-        groupProductInformation = new ArrayList<>();
+        //listHashMap = new HashMap<>();
+        //groupProductInformation = new ArrayList<>();
+
+        shopList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        final ShopListAdapter listAdapter = new ShopListAdapter();
+        shopList.setAdapter(listAdapter);
+
+        list = new ArrayList<>();
+
+        for (int i = 0; i<10; i++){
+            ListProduct p = new
+                    ListProduct("Maionese",
+                    /*"Lorem Ipsum"*/"",
+                    /*"Calvè"*/"",
+                    /*"Lorem Ipsum"*/"",
+                    /*"725272730706"*/ "",
+                    1,
+                    R.drawable.maionese,
+                    1.50,
+                    20,
+                    false);
+            list.add(p);
+        }
+        listAdapter.setItemList(list);
 
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,7 +225,7 @@ public class ShopList extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 addData();
-                shopList.setAdapter(new ExpandableShopListAdapter(context,groupProductInformation,listHashMap));
+                //shopList.setAdapter(new ExpandableShopListAdapter(context,groupProductInformation,listHashMap));
 
             }
         });
@@ -217,9 +248,9 @@ public class ShopList extends Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 writeOnFile("", Context.MODE_PRIVATE);
-                groupProductInformation = new ArrayList<>();
-                listHashMap = new HashMap<>();
-                shopList.setAdapter(new ExpandableShopListAdapter(context,groupProductInformation,listHashMap));
+                //groupProductInformation = new ArrayList<>();
+                //listHashMap = new HashMap<>();
+                //shopList.setAdapter(new ExpandableShopListAdapter(context,groupProductInformation,listHashMap));
             }
         });
         builder.setNegativeButton(negativeAction, new DialogInterface.OnClickListener() {
@@ -242,12 +273,12 @@ public class ShopList extends Fragment {
         double disc = 2.0;
         int quantity = 1;
 
-        groupProductInformation.add(new ProductGroup(name,price,quantity,disc));
+        //groupProductInformation.add(new ProductGroup(name,price,quantity,disc));
 
         List<ProductDetails> productDetails = new ArrayList<>();
         productDetails.add(new ProductDetails(branding,ingr,desc,barcode));
 
-        listHashMap.put(groupProductInformation.get(groupProductInformation.size()-1),productDetails);
+        //listHashMap.put(groupProductInformation.get(groupProductInformation.size()-1),productDetails);
 
         DatabaseReference productsReference  = listReference.push();
         Product product = new Product(name,branding,ingr,desc,barcode,quantity,price,disc);
@@ -280,13 +311,13 @@ public class ShopList extends Fragment {
         double price = Double.parseDouble(productFields.nextToken());
         double disc = Double.parseDouble(productFields.nextToken());
 
-        groupProductInformation.add(new ProductGroup(name,price,quantity,disc));
+        //groupProductInformation.add(new ProductGroup(name,price,quantity,disc));
 
-        List<ProductDetails> productDetails = new ArrayList<>();
-        productDetails.add(new ProductDetails(branding,ingr,desc,barcode));
+        //List<ProductDetails> productDetails = new ArrayList<>();
+        //productDetails.add(new ProductDetails(branding,ingr,desc,barcode));
 
-        listHashMap.put(groupProductInformation.get(groupProductInformation.size()-1),productDetails);
-        shopList.setAdapter(new ExpandableShopListAdapter(context,groupProductInformation,listHashMap));
+        //listHashMap.put(groupProductInformation.get(groupProductInformation.size()-1),productDetails);
+        //shopList.setAdapter(new ExpandableShopListAdapter(context,groupProductInformation,listHashMap));
     }
 
     public void writeOnFile(String s, int contextMode){
