@@ -1,0 +1,143 @@
+[debug] [2018-05-01T14:04:54.024Z] ----------------------------------------------------------------------
+[debug] [2018-05-01T14:04:54.024Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve --only functions,hosting
+[debug] [2018-05-01T14:04:54.024Z] CLI Version:   3.18.4
+[debug] [2018-05-01T14:04:54.024Z] Platform:      win32
+[debug] [2018-05-01T14:04:54.024Z] Node Version:  v9.6.1
+[debug] [2018-05-01T14:04:54.071Z] Time:          Tue May 01 2018 16:04:54 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-01T14:04:54.071Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-05-01T14:04:54.555Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-05-01T14:04:54.555Z] > authorizing via signed-in user
+[debug] [2018-05-01T14:04:54.555Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-05-01T14:04:54.555Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/d315euSszca-mXENIGpqd1F_YhKu7VK6JrbhoqzCjVI',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Tue May 01 2018 16:04:54 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-01T14:04:55.243Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-01T14:04:55.477Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/smop-database-ca8b7  
+  
+ Tue May 01 2018 16:04:55 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-01T14:04:57.118Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-01T14:04:57.118Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/smop-database-ca8b7/tokens  
+  
+ Tue May 01 2018 16:04:57 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-01T14:04:59.025Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-01T14:04:59.025Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/smop-database-ca8b7  
+  
+ Tue May 01 2018 16:04:59 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-01T14:05:00.322Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\matte\Documents\Scuola\Tesina\smop_firebase_functions'...
+[info] 
+[info] i  functions: Preparing to emulate functions.
+[debug] [2018-05-01T14:05:31.309Z] Fetching environment
+[debug] [2018-05-01T14:05:31.325Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/258308061832:getServerAppConfig  
+  
+ Tue May 01 2018 16:05:31 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-01T14:05:31.325Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/258308061832/clients/_:getWebAppConfig  
+  
+ Tue May 01 2018 16:05:31 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-01T14:05:32.059Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-01T14:05:32.059Z] Starting @google-cloud/functions-emulator
+[debug] [2018-05-01T14:05:32.481Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: smopAppWebsite
+[info] +  hosting: Local server: http://localhost:5000
+
+[debug] [2018-05-01T14:05:41.935Z] Parsing function triggers
+[info] +  functions: helloWorld: http://localhost:5001/smop-database-ca8b7/us-central1/helloWorld
+[debug] [2018-05-03T06:53:12.560Z] ----------------------------------------------------------------------
+[debug] [2018-05-03T06:53:12.560Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve --only hosting
+[debug] [2018-05-03T06:53:12.560Z] CLI Version:   3.18.4
+[debug] [2018-05-03T06:53:12.560Z] Platform:      win32
+[debug] [2018-05-03T06:53:12.560Z] Node Version:  v9.6.1
+[debug] [2018-05-03T06:53:12.560Z] Time:          Thu May 03 2018 08:53:12 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-03T06:53:12.560Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-05-03T06:53:12.591Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-05-03T06:53:12.591Z] > authorizing via signed-in user
+[debug] [2018-05-03T06:53:12.591Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-05-03T06:53:12.591Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/d315euSszca-mXENIGpqd1F_YhKu7VK6JrbhoqzCjVI',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Thu May 03 2018 08:53:12 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-03T06:53:12.732Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-03T06:53:12.779Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/smop-database-ca8b7  
+  
+ Thu May 03 2018 08:53:12 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-03T06:53:13.690Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-03T06:53:13.690Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/smop-database-ca8b7/tokens  
+  
+ Thu May 03 2018 08:53:13 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-03T06:53:14.503Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-03T06:53:14.503Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/smop-database-ca8b7  
+  
+ Thu May 03 2018 08:53:14 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-03T06:53:15.300Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\matte\Documents\Scuola\Tesina\smop_firebase_functions'...
+[info] 
+[debug] [2018-05-03T06:53:15.300Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/258308061832/clients/_:getWebAppConfig  
+  
+ Thu May 03 2018 08:53:15 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-03T06:53:15.799Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: smopAppWebsite
+[info] +  hosting: Local server: http://localhost:5000
+
+[debug] [2018-05-03T07:06:38.476Z] Error: connect ECONNREFUSED 216.58.205.163:443
+    at Object._errnoException (util.js:1003:13)
+    at _exceptionWithHostPort (util.js:1024:20)
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1181:14)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2018-05-04T10:36:12.412Z] ----------------------------------------------------------------------
+[debug] [2018-05-04T10:36:12.414Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\matte\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve --only hosting
+[debug] [2018-05-04T10:36:12.414Z] CLI Version:   3.18.4
+[debug] [2018-05-04T10:36:12.415Z] Platform:      win32
+[debug] [2018-05-04T10:36:12.415Z] Node Version:  v9.6.1
+[debug] [2018-05-04T10:36:12.415Z] Time:          Fri May 04 2018 12:36:12 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-04T10:36:12.415Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-05-04T10:36:12.440Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-05-04T10:36:12.441Z] > authorizing via signed-in user
+[debug] [2018-05-04T10:36:12.442Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-05-04T10:36:12.442Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/d315euSszca-mXENIGpqd1F_YhKu7VK6JrbhoqzCjVI',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Fri May 04 2018 12:36:12 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-04T10:36:12.619Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-04T10:36:12.693Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/smop-database-ca8b7  
+  
+ Fri May 04 2018 12:36:12 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-04T10:36:14.485Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-04T10:36:14.488Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/smop-database-ca8b7/tokens  
+  
+ Fri May 04 2018 12:36:14 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-04T10:36:15.142Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-04T10:36:15.146Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/smop-database-ca8b7  
+  
+ Fri May 04 2018 12:36:15 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-04T10:36:15.965Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\matte\Documents\Scuola\Tesina\smop_firebase_functions'...
+[info] 
+[debug] [2018-05-04T10:36:15.980Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/258308061832/clients/_:getWebAppConfig  
+  
+ Fri May 04 2018 12:36:15 GMT+0200 (ora legale Europa occidentale)
+[debug] [2018-05-04T10:36:16.438Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: smopAppWebsite
+[info] +  hosting: Local server: http://localhost:5000
+
+[debug] [2018-05-04T10:53:38.391Z] Error: getaddrinfo ENOTFOUND www.gstatic.com www.gstatic.com:443
+    at errnoException (dns.js:55:10)
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:97:26)
+[error] 
+[error] Error: An unexpected error has occurred.

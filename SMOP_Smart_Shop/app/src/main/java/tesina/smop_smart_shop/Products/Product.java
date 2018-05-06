@@ -6,6 +6,8 @@ public class Product {
     int quantity;
     double price, discount;
 
+    public Product(){}
+
     public Product(String productName, String branding, String ingredients, String description, String barcode, int quantity, double price, double discount) {
         this.productName = productName;
         this.branding = branding;

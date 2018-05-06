@@ -5,7 +5,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +25,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,8 +34,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +52,7 @@ import java.util.StringTokenizer;
 
 import tesina.smop_smart_shop.Adapter.ExpandableShopListAdapter;
 import tesina.smop_smart_shop.Adapter.ShopListAdapter;
+import tesina.smop_smart_shop.Products.DatabaseProduct;
 import tesina.smop_smart_shop.Products.ListProduct;
 import tesina.smop_smart_shop.Products.Product;
 import tesina.smop_smart_shop.Products.ProductDetails;
@@ -54,6 +63,10 @@ import tesina.smop_smart_shop.SignIn.Login;
 
 public class ShopList extends Fragment {
     final String LIST_FILE_NAME = "list.txt";
+    final String IMG_FORMAT = "jpg";
+    final String IMG_FILE_NAME = "barcode_d";
+    private final boolean PROGETTO_PROMOZIONALE = false;
+
     private String[] products = new String[]{"Pasta", "Spaghetti"};
 
     View view;
@@ -64,13 +77,17 @@ public class ShopList extends Fragment {
     DatabaseReference listReference;
     DatabaseReference productReference;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
+    StorageReference storage = FirebaseStorage.getInstance().getReference();
     String userUid;
     RecyclerView shopList;
     List<ListProduct> list;
+    ShopListAdapter listAdapter;
     //List<ProductGroup> groupProductInformation;
     //HashMap<ProductGroup, List<ProductDetails>> listHashMap;
 
     FloatingActionButton addItem, deleteList;
+
+
 
     @Nullable
     @Override
@@ -86,30 +103,13 @@ public class ShopList extends Fragment {
         deleteList = view.findViewById(R.id.deleteList);
         shopList = view.findViewById(R.id.shop_list);
 
-        //listHashMap = new HashMap<>();
-        //groupProductInformation = new ArrayList<>();
-
         shopList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        final ShopListAdapter listAdapter = new ShopListAdapter();
+        listAdapter = new ShopListAdapter();
         shopList.setAdapter(listAdapter);
 
         list = new ArrayList<>();
-
-        for (int i = 0; i<10; i++){
-            ListProduct p = new
-                    ListProduct("Maionese",
-                    /*"Lorem Ipsum"*/"",
-                    /*"Calvè"*/"",
-                    /*"Lorem Ipsum"*/"",
-                    /*"725272730706"*/ "",
-                    1,
-                    R.drawable.maionese,
-                    1.50,
-                    20,
-                    false);
-            list.add(p);
-        }
-        listAdapter.setItemList(list);
+        //loadData();
+        promo();
 
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,20 +127,55 @@ public class ShopList extends Fragment {
 
         listReference = database.getReference("users/"+userUid+"/lists/").push();
         productReference = database.getReference("products/");
-        //productReference.push().setValue(new Product("nome","marca","ingredienti","desctizione","aaa",1,1,1));
 
 
         if (getArguments() != null){
             scannedBarcode = getArguments().getString("ScannedBarcode");
             Toast.makeText(context, scannedBarcode, Toast.LENGTH_SHORT).show();
-            Query result = productReference.orderByChild("barcode").equalTo(scannedBarcode);
+            Query result = productReference.child(scannedBarcode);
             result.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null){
-                        for (DataSnapshot children : dataSnapshot.getChildren()){
-                            HashMap<String,Object> obj = (HashMap<String, Object>) children.getValue();
+                    if (dataSnapshot.exists()){
+                        DatabaseProduct databaseProduct = dataSnapshot.getValue(DatabaseProduct.class);
+
+                        int index = searchForProduct(list,scannedBarcode);
+                        if (index != -1){
+                            Toast.makeText(context,"Bella!!!",Toast.LENGTH_SHORT).show();
+                            writeAllListOnFile(list);
+                        } else {
+                            Toast.makeText(context,"Non era gia stato aggiunto !!!",Toast.LENGTH_SHORT).show();
+                            ListProduct p = new ListProduct(databaseProduct, true);
+                            /*try {
+                                File localFile = File.createTempFile(IMG_FILE_NAME, IMG_FORMAT);
+                                final StorageReference img = storage.child("products/" + IMG_FILE_NAME + "." + IMG_FORMAT);
+                                img.getDownloadUrl()
+                                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            @Override
+                                            public void onSuccess(Uri uri) {
+                                                Log.i("OK", "Ok");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.i("Errore", e.toString());
+                                            }
+                                        });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }*/
+                            p.setImg(R.drawable.ic_shopping_basket);
+                            p.setQuantity(p.getQuantity() + 1);
+                            p.setPrice(p.getPrice() * p.getQuantity());
+                            p.setScanned(true);
+                            p.setScannedQuantity(p.getScannedQuantity() + 1);
+                            list.add(p);
+                            writeOnFile(p.toString(),Context.MODE_APPEND);
                         }
+                        listAdapter = new ShopListAdapter();
+                        shopList.setAdapter(listAdapter);
+                        listAdapter.setItemList(list);
                     } else {
                         Toast.makeText(context,"No product found",Toast.LENGTH_SHORT).show();
                     }
@@ -152,13 +187,39 @@ public class ShopList extends Fragment {
                 }
             });
         }
-        //productReference.setValue(new Product("Maionese tubetto 100g","Calvè","Uova","Maionese Calvè prodotta del 1980","ABC123",5,1.15,5));
-        loadData();
 
         return view;
     }
 
+    public void writeAllListOnFile(List<ListProduct> listProducts){
+        for (ListProduct p : listProducts){
+            writeOnFile(p.toString(),Context.MODE_PRIVATE);
+        }
+    }
 
+    public int searchForProduct(List<ListProduct> products, String name){
+        int i =-1; boolean find;
+        if (products.size() > 0){
+            do {
+                i++;
+                find = findScannedBarcode(products.get(i),name);
+            } while (products.size() <= i && !find);
+        } else {
+            find = false;
+        }
+        return (find) ? i : -1;
+    }
+
+    public boolean findScannedBarcode(ListProduct product, String name){
+        if (product.isScanned() && product.getBarcode().equals(name)){
+            product.setScannedQuantity(product.getScannedQuantity() + 1);
+            product.setQuantity(product.getQuantity() + 1);
+            product.setPrice(product.getQuantity() * product.getPrice());
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -248,6 +309,7 @@ public class ShopList extends Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 writeOnFile("", Context.MODE_PRIVATE);
+                shopList.setAdapter(new ShopListAdapter());
                 //groupProductInformation = new ArrayList<>();
                 //listHashMap = new HashMap<>();
                 //shopList.setAdapter(new ExpandableShopListAdapter(context,groupProductInformation,listHashMap));
@@ -303,14 +365,19 @@ public class ShopList extends Fragment {
     private void applyDataOnTheScreen(String productToken) {
         StringTokenizer productFields = new StringTokenizer(productToken,",");
         String name = productFields.nextToken();
-        String branding = productFields.nextToken();
-        String ingr = productFields.nextToken();
         String desc = productFields.nextToken();
+        String brand = productFields.nextToken();
+        String ingr = productFields.nextToken();
         String barcode = productFields.nextToken();
         int quantity = Integer.parseInt(productFields.nextToken());
+        int img = Integer.parseInt(productFields.nextToken());
         double price = Double.parseDouble(productFields.nextToken());
         double disc = Double.parseDouble(productFields.nextToken());
+        int scQuantity = Integer.parseInt(productFields.nextToken());
+        boolean isScanned = Boolean.parseBoolean(productFields.nextToken());
 
+        list.add(new ListProduct(name, desc, brand, ingr, barcode, quantity, img, price, disc,scQuantity, isScanned));
+        listAdapter.setItemList(list);
         //groupProductInformation.add(new ProductGroup(name,price,quantity,disc));
 
         //List<ProductDetails> productDetails = new ArrayList<>();
@@ -359,5 +426,31 @@ public class ShopList extends Fragment {
         }
 
         return ret;
+    }
+
+    public void promo(){
+        list.add( new ListProduct("Maionese in vasetto.",
+                "Maionese da utilizzare in cucina, buona con qualsiasi cosa.",
+                "Calvè.",
+                "Tuorlo, succo di limoni, olio, aceto di vino bianco, pepe e sale fino.",
+                "725272730706",
+                2,
+                R.drawable.maionese,
+                1.50,
+                5,
+                1,
+                true));
+        list.add( new ListProduct("Manzo.",
+                "Manzo da 200g.",
+                "Macellaio",
+                "Pura carne di animale. 100% BIO",
+                "9788679912077",
+                1,
+                R.drawable.manzo,
+                13.4,
+                0,
+                0,
+                true));
+        listAdapter.setItemList(list);
     }
 }

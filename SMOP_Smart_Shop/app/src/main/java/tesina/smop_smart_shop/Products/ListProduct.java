@@ -10,22 +10,37 @@ public class ListProduct {
     private int scannedQuantity = 0;
     private boolean isScanned;
 
+    public ListProduct() {
+    }
 
-    public ListProduct(String productName, String description,String brand, String ingredients, String barcode, int quantity, int img, double price, double discount, boolean isScanned) {
+
+    public ListProduct(String productName, String description, String brand, String ingredients, String barcode, int quantity, int img, double price, double discount,int scannedQuantity, boolean isScanned) {
         this.productName = productName;
-        this.description = checkConstructor("Descrizione: ", description);
-        this.brand = checkConstructor("Marca: ", brand);
-        this.ingredients = checkConstructor("Ingredienti: ", ingredients);
-        this.barcode = checkConstructor("Codice: ", barcode);
+        this.description = checkConstructor( description);
+        this.brand = checkConstructor(brand);
+        this.ingredients = checkConstructor( ingredients);
+        this.barcode = checkConstructor(barcode);
         this.quantity = quantity;
         this.img = img;
         this.price = price;
         this.discount = discount;
+        this.scannedQuantity = scannedQuantity;
         this.isScanned = isScanned;
     }
 
-    public String checkConstructor(String preString, String obj){
-        return (obj.equals("")) ? "" : preString + " " + obj;
+    public ListProduct (DatabaseProduct databaseProduct, boolean isScanned){
+        this.productName = databaseProduct.getProductName();
+        this.description = databaseProduct.getDescription();
+        this.brand = databaseProduct.getBranding();
+        this.ingredients = databaseProduct.getIngredients();
+        this.barcode = databaseProduct.getBarcode();
+        this.price = databaseProduct.getPrice();
+        this.discount = databaseProduct.getDiscount();
+        this.isScanned = isScanned;
+    }
+
+    private String checkConstructor( String obj){
+        return (obj.equals("") || obj == null) ? "" : obj;
     }
 
     public String getProductName() {
@@ -114,5 +129,20 @@ public class ListProduct {
 
     public void setScanned(boolean scanned) {
         isScanned = scanned;
+    }
+
+    @Override
+    public String toString() {
+        return  productName +
+                "," + description +
+                "," + brand +
+                "," + ingredients +
+                "," + barcode +
+                "," + quantity +
+                "," + img +
+                "," + price +
+                "," + discount +
+                "," + scannedQuantity +
+                "," + isScanned + ";" ;
     }
 }

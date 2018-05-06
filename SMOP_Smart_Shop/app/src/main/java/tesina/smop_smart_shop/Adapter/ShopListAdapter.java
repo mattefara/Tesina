@@ -49,11 +49,16 @@ public class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    public void setItemList(ListProduct product){
+        this.list.add(product);
+    }
+
     public final static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final static int LAYOUT = R.layout.collapsed_product_list_item;
         private ImageView img;
         private TextView name, quantity, description, discount, price, brand, ingredients, barcode;
+        private final TextView money;
         private ExpansionLayout expansionLayout;
 
 
@@ -69,6 +74,8 @@ public class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.ViewHo
             discount = itemView.findViewById(R.id.product_discount);
             price = itemView.findViewById(R.id.price);
 
+            money = itemView.findViewById(R.id.money);
+
             expansionLayout = itemView.findViewById(R.id.expansion_layout);
         }
 
@@ -80,23 +87,31 @@ public class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.ViewHo
             img.setImageResource(p.getImg());
             name.setText(p.getProductName());
 
-            checkExistingStringAttribute(p.getBrand(),brand);
-            checkExistingStringAttribute(p.getIngredients(),ingredients);
-            checkExistingStringAttribute(p.getBarcode(),barcode);
-            checkExistingStringAttribute(p.getDescription(),description);
+            checkExistingStringAttribute(p.getBrand(),brand,"Band");
+            checkExistingStringAttribute(p.getIngredients(),ingredients,"Ingredients");
+            checkExistingStringAttribute(p.getBarcode(),barcode,"Barcode");
+            checkExistingStringAttribute(p.getDescription(),description,"Description");
 
-            quantity.setText(p.getQuantity() + "x");
-            discount.setText("Sconto: " + p.getDiscount() + "%");
-            price.setText(String.valueOf(p.getPrice()));
+            quantity.setText((p.getPrice() == 0) ? "x" + p.getQuantity() : (p.getQuantity() + "x"));
+            if (p.getPrice() == 0){
+                price.setVisibility(View.GONE);
+                money.setVisibility(View.GONE);
+                quantity.setPadding(0,0,40,0);
+                quantity.setTextSize(20);
+            } else {
+                price.setText(String.valueOf(p.getPrice()));
+            }
+
+
 
             expansionLayout.collapse(false);
         }
 
-        public void checkExistingStringAttribute(String attr, TextView tw){
+        public void checkExistingStringAttribute(String attr, TextView tw, String msg){
             if (attr.equals("")) {
                 tw.setVisibility(View.GONE);
             } else {
-                tw.setText(attr);
+                tw.setText(msg + ": " +attr);
             }
         }
 

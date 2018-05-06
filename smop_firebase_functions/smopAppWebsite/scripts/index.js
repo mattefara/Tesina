@@ -45,8 +45,14 @@ document.addEventListener('DOMContentLoaded', function() {
         var uid = user.uid;
         var providerData = user.providerData;
         console.log(uid)
-        firebase.database().ref('test').push().set({
-          test  : 'Questo è un test'
+        firebase.database().ref('products/671860013624').set({
+          barcode: "671860013624",
+          branding: "Una marca buona",
+          description: "Lorem ipsum dolor est....",
+          discount: 3,
+          ingredients: "Qualche ingradiente segreto",
+          price: 4,
+          productName: "Manzo"
         }).catch(function(error){
           alert("TU \nNON \nPUOI \nSCRIVERE!!!")
         })
