@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item android:title="Shop">
+            <menu>
+                <item
+                    android:id="@+id/make_your_list"
+                    android:icon="@drawable/ic_shopping_basket"
+                    android:title="Make your list" />
+                <item
+                    android:id="@+id/connect_to_shopping_cart"
+                    android:icon="@drawable/ic_shopping_cart"
+                    android:title="Connect to your shopping cart"/>
+            </menu>
+        </item>
+
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item android:title="Options">
+            <menu>
+                <item
+                    android:id="@+id/settings"
+                    android:icon="@drawable/ic_settings"
+                    android:title="Settings" />
+                <item
+                    android:id="@+id/log_out"
+                    android:icon="@drawable/ic_exit_to_app"
+                    android:title="Logout" />
+            </menu>
+        </item>
+
+    </group>
+
+
+</menu>
