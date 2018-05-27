@@ -22,4 +22,7 @@
     <string name="error_invalid_name">Name is empty or too long</string>
     <string name="error_invalid_lastname">Last name is empty or too long</string>
     <string name="error_passwrd_not_equal">Passwrod doesn\'t correspond or are empty</string>
+    <string name="ok">OK</string>
+    <string name="not_empty_field">This field can\'t be empty</string>
+    <string name="emply_list">Please add some new contents. \nUse the \'+\' button.</string>
 </resources>
