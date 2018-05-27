@@ -108,7 +108,7 @@ public class ShopList extends Fragment {
         shopList.setAdapter(listAdapter);
 
         list = new ArrayList<>();
-        //loadData();
+        loadData();
         promo();
 
         addItem.setOnClickListener(new View.OnClickListener() {
@@ -230,7 +230,7 @@ public class ShopList extends Fragment {
     }
 
     private void buildAddItemDialog(LayoutInflater inflater) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final View dialogView = inflater.inflate(R.layout.dialog_add_item, null);
 
         count_item = 0;
