@@ -34,3 +34,8 @@ exports.like = functions.https.onCall((data, context) => {
   console.log("xxxxx",x)
   return x;
 })
+
+exports.hourly_job =
+  functions.pubsub.topic('hourly-tick').onPublish((event) => {
+    console.log("This job is ran every hour!")
+  });
