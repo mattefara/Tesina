@@ -1,7 +1,9 @@
 package com.tesina.smop_app.Account;
 
 public class UserInformations {
-    private String name, lastName;
+    private String name, lastName, displayName;
+
+    public UserInformations(){}
 
     public UserInformations(String name, String lastName) {
         this.name = name;

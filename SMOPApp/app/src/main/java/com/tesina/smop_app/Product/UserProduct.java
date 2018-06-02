@@ -5,6 +5,8 @@ public class UserProduct {
     private int quantity;
     private boolean isSelected, isEdited;
 
+    public UserProduct(){}
+
     public UserProduct(String name, int quantity) {
         this.name = name;
         this.quantity = quantity;

@@ -28,6 +28,7 @@ import com.tesina.smop_app.Dialog.UserItemDialog;
 import com.tesina.smop_app.Interfaces.MenuListener;
 import com.tesina.smop_app.Product.UserProduct;
 import com.tesina.smop_app.R;
+import com.tesina.smop_app.Threads.UserProductThread;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -36,8 +37,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
-public class UserList extends BaseFragment implements MenuListener {
+public class UserList extends BaseFragment<UserProduct> implements MenuListener {
 
     private static final String USER_LIST_FILE_NAME = "user_list.csv";
     View view;
@@ -58,12 +60,21 @@ public class UserList extends BaseFragment implements MenuListener {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         userList.setLayoutManager(layoutManager);
-        userListAdapter = new UserListAdapter(context,inflater);
+        userListAdapter = new UserListAdapter(context,USER_LIST_FILE_NAME,inflater);
         userList.setAdapter(userListAdapter);
         userListAdapter.setMenuListener(this);
-        //This reset the file with empty text
-        //writeOnFile("",context,Context.MODE_PRIVATE,USER_LIST_FILE_NAME);
-        List<UserProduct> p = loadData(context,USER_LIST_FILE_NAME);
+
+        UserProductThread productThread = new UserProductThread(context, USER_LIST_FILE_NAME, UserProductThread.MODE_LOAD);
+        productThread.start();
+        try {
+            productThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        List<UserProduct> p = productThread.getItems();
+
+        //List<UserProduct> p = loadData(context,USER_LIST_FILE_NAME);
+
         if ( p != null){
             userListAdapter.setItemsList(p);
             userListAdapter.notifyDataSetChanged();
@@ -107,5 +118,14 @@ public class UserList extends BaseFragment implements MenuListener {
         }
 
         return false;
+    }
+
+    @Override
+    public UserProduct applyDataOnTheScreen(String productToken) {
+        StringTokenizer productFields = new StringTokenizer(productToken,",");
+        String name = productFields.nextToken();
+        int quantity = Integer.parseInt(productFields.nextToken());
+
+        return new UserProduct(name,quantity);
     }
 }

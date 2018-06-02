@@ -6,6 +6,10 @@ public class DatabaseProduct extends UserProduct {
     private int img;
     private String description, ingredients, brand, barcode;
 
+    public DatabaseProduct(){
+        super();
+    }
+
     public DatabaseProduct(String name, int quantity, double price, double discount, int img, String description, String ingredients, String brand, String barcode) {
         super(name, quantity);
         this.price = price;

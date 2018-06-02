@@ -2,61 +2,56 @@ package com.tesina.smop_app.Shopping;
 
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.tesina.smop_app.Adapter.ScannedListAdapter;
 import com.tesina.smop_app.Adapter.TabAdapter;
 import com.tesina.smop_app.Adapter.UserListAdapter;
 import com.tesina.smop_app.Camera.CameraScanner;
 import com.tesina.smop_app.Dialog.UserItemDialog;
-import com.tesina.smop_app.Manifest;
+import com.tesina.smop_app.Product.DatabaseProduct;
 import com.tesina.smop_app.Product.UserProduct;
 import com.tesina.smop_app.R;
 import com.tesina.smop_app.Tabs.BaseFragment;
 import com.tesina.smop_app.Tabs.ScannedList;
 import com.tesina.smop_app.Tabs.UserList;
+import com.tesina.smop_app.Threads.UserProductThread;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.List;
+import java.util.StringTokenizer;
 
-public class ShoppingList extends BaseFragment {
+import static android.app.Activity.RESULT_OK;
+
+public class ShoppingList extends BaseFragment<DatabaseProduct> {
+
+    //TODO: ADD DATABASEPRODUCT TO RECYCLERVIEW
 
     View view;
     Context context;
@@ -66,10 +61,15 @@ public class ShoppingList extends BaseFragment {
     LayoutInflater fragmentInflater;
     UserList userList;
     ScannedList scannedList;
-    UserListAdapter adapter;
+    UserListAdapter userListAdapter;
+    ScannedListAdapter scannedListAdapter;
+    TabLayout tabLayout;
+    DatabaseReference productReference = FirebaseDatabase.getInstance().getReference("products");
     private MenuItem deleteSelectedItems;
-    private final String LIST_FILE_NAME = "user_list.csv";
+    private final String USER_LIST_FILE_NAME = "user_list.csv";
+    private final String SCANNED_LIST_FILE_NAME = "scanned_list.csv";
     private final int CAMERA_REQUEST_CODE = 1;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class ShoppingList extends BaseFragment {
         super.onAttach(context);
     }
 
-    @Nullable
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
@@ -106,20 +106,30 @@ public class ShoppingList extends BaseFragment {
 
         setupViewPager(viewPager);
 
-        TabLayout tabLayout = view.findViewById(R.id.shop_tab);
+        tabLayout = view.findViewById(R.id.shop_tab);
         tabLayout.setupWithViewPager(viewPager);
 
         actionListButton = view.findViewById(R.id.list_action);
         actionListButton.setOnClickListener(actionListButtonClickListener());
         //Change image between add and camera
         setTabIconChange(tabLayout);
+        //get the latest tab
 
+        SharedPreferences preferences = context.getSharedPreferences("isSelectedScannedTab",Context.MODE_PRIVATE);
+        if (preferences.getBoolean("selected", false)){
+            tabLayout.getTabAt(1).select();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("selected",false);
+            editor.apply();
+        }
 
+        //List<DatabaseProduct> data = loadData(context, SCANNED_LIST_FILE_NAME);
 
         return view;
     }
 
-    private void setupViewPager( ViewPager viewPager){
+
+    private void setupViewPager(ViewPager viewPager){
         TabAdapter tabAdapter = new TabAdapter(getChildFragmentManager());
         userList = new UserList();
         tabAdapter.addFragment(userList, "List");
@@ -157,8 +167,9 @@ public class ShoppingList extends BaseFragment {
             }
         });
 
-    }
 
+
+    }
 
     public View.OnClickListener actionListButtonClickListener(){
         return new View.OnClickListener() {
@@ -169,31 +180,31 @@ public class ShoppingList extends BaseFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        adapter = (UserListAdapter) userList.getUserList().getAdapter();
+                        userListAdapter = (UserListAdapter) userList.getUserList().getAdapter();
 
                         UserProduct userProduct = new UserProduct(
                                 dialog.productName.getText().toString(),
                                 Integer.parseInt(dialog.productQuantity.getText().toString())
                         );
 
-                        List<UserProduct> userProducts = adapter.getList();
+                        List<UserProduct> userProducts = userListAdapter.getList();
                         int index ;
-                        if ((index = adapter.indexOf(userProduct)) != -1){
+                        if ((index = userListAdapter.indexOf(userProduct)) != -1){
                             userProducts.get(index).setQuantity(userProducts.get(index).getQuantity() + userProduct.getQuantity() );
                         } else {
-                            adapter.setItemList(userProduct);
+                            userListAdapter.setItemList(userProduct);
                         }
-                        adapter.sort();
-                        writeOnFile(adapter.toString(),context,Context.MODE_PRIVATE,LIST_FILE_NAME);
-                        adapter.notifyDataSetChanged();
+                        userListAdapter.sort();
+                        UserProductThread productThread = new UserProductThread(context,USER_LIST_FILE_NAME, UserProductThread.MODE_WRITE , userListAdapter.toString(), Context.MODE_PRIVATE );
+                        productThread.start();
+                        //writeOnFile(userListAdapter.toString(),context,Context.MODE_PRIVATE, USER_LIST_FILE_NAME);
+                        userListAdapter.notifyDataSetChanged();
 
 
-                        if (adapter.getList().size() == 1){
+                        if (userListAdapter.getList().size() == 1){
                             ConstraintLayout emptyListContainer = rootGroup.findViewById(R.id.container_empty_list);
                             emptyListContainer.setVisibility(View.GONE);
                         }
-
-
 
                     }
                 });
@@ -201,18 +212,17 @@ public class ShoppingList extends BaseFragment {
         };
     }
 
-
-
     public View.OnClickListener actionScannedListButtonClickListener(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checKForPermissions();
+                checkForPermissions();
+                scannedListAdapter = (ScannedListAdapter) scannedList.getScannedList().getAdapter();
             }
         };
     }
 
-    public void checKForPermissions(){
+    public void checkForPermissions(){
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
 
             if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, android.Manifest.permission.CAMERA)){
@@ -241,8 +251,56 @@ public class ShoppingList extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Bundle datas = data.getExtras();
-        String barcode = datas.getString("Barcode");
-        Toast.makeText(context, "Request code: " + requestCode + "\nResult code: " + resultCode, Toast.LENGTH_SHORT ).show();
+        switch (requestCode){
+            case CAMERA_REQUEST_CODE: {
+                SharedPreferences preferences = context.getSharedPreferences("isSelectedScannedTab",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("selected",true);
+                editor.apply();
+                if (resultCode == RESULT_OK){
+                    String barcode = data.getExtras().getString("Barcode");
+                    String fakeBarcode = "725272730706";
+                    makeQueryForProduct(fakeBarcode);
+                    Toast.makeText(context, "Barcode: " + barcode, Toast.LENGTH_SHORT ).show();
+                }
+            }
+        }
+
+    }
+
+    private void makeQueryForProduct(final String barcode) {
+        productReference.orderByChild("barcode").equalTo(barcode).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    DatabaseProduct product = dataSnapshot.getValue(DatabaseProduct.class);
+                } else {
+                    Toast.makeText(context,getString(R.string.no_product_found), Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public DatabaseProduct applyDataOnTheScreen(String productToken) {
+        StringTokenizer productFields = new StringTokenizer(productToken,",");
+        String name = productFields.nextToken();
+        int quantity = Integer.parseInt(productFields.nextToken());
+        double price = Double.parseDouble(productFields.nextToken());
+        double discount = Double.parseDouble(productFields.nextToken());
+        int img = Integer.parseInt(productFields.nextToken());
+        String description = productFields.nextToken();
+        String ingredient = productFields.nextToken();
+        String brand = productFields.nextToken();
+        String barcode = productFields.nextToken();
+
+
+        return new DatabaseProduct(name,quantity,price,discount,img,description,ingredient,brand,barcode);
     }
 }

@@ -12,6 +12,8 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -19,6 +21,7 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.tesina.smop_app.Interfaces.BackListener;
 import com.tesina.smop_app.R;
 
 import java.io.IOException;
@@ -26,17 +29,20 @@ import java.io.IOException;
 public class CameraScanner extends Activity {
     Context context;
     SurfaceView camera;
+    private final int CAMERA_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_camera);
         context = getApplicationContext();
         camera = findViewById(R.id.camera_preview);
         startCamera();
 
     }
-
 
     private void startCamera() {
         final BarcodeDetector barcode = new BarcodeDetector.Builder(this).build();
@@ -88,11 +94,13 @@ public class CameraScanner extends Activity {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() > 0) {
                     Intent intent = new Intent();
-                    intent.putExtra("Barcode", barcodes.valueAt(0));
-                    setResult(CommonStatusCodes.SUCCESS, intent);
+                    String barcode = barcodes.valueAt(0).displayValue;
+                    intent.putExtra("Barcode", barcode);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
         });
     }
+
 }

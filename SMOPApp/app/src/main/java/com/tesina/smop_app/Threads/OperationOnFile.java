@@ -1,23 +1,7 @@
-package com.tesina.smop_app.Tabs;
-
+package com.tesina.smop_app.Threads;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import com.tesina.smop_app.Dialog.UserItemDialog;
-import com.tesina.smop_app.Product.DatabaseProduct;
-import com.tesina.smop_app.Product.UserProduct;
-import com.tesina.smop_app.R;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -26,31 +10,38 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public abstract class BaseFragment<T> extends Fragment {
+public abstract class OperationOnFile<T> extends Thread {
 
-    /*
-    TODO: CONVERT THIS CLASS IN ONE THREAD
-     */
+    private List<T> items;
 
-    public void writeOnFile(String s,Context context, int contextMode, String FILE_NAME){
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(FILE_NAME, contextMode));
-            outputStreamWriter.write(s);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
+    Context context;
+    int mode;
+    int contextMode;
+    String text;
+    public final String FILE_NAME;
 
+    public OperationOnFile(Context context, String FILE_NAME){
+        this.context = context;
+        this.FILE_NAME = FILE_NAME;
+        this.items = new ArrayList<>();
+        this.text = "";
     }
 
-    public String readFile(Context context, String FILE_NAME){
-        String ret = "";
+    public OperationOnFile(Context context, String FILE_NAME, String text, int contextMode){
+        this.context = context;
+        this.FILE_NAME = FILE_NAME;
+        this.text = text;
+        this.contextMode = contextMode;
+        this.items = new ArrayList<>();
+    }
+
+
+
+    public String read(){
+        String data = "";
         try {
             InputStream inputStream = context.openFileInput(FILE_NAME);
 
@@ -65,21 +56,31 @@ public abstract class BaseFragment<T> extends Fragment {
                 }
 
                 inputStream.close();
-                ret = stringBuilder.toString();
+                data = stringBuilder.toString();
             }
         }
         catch (FileNotFoundException e) {
             Log.e("login activity", "File not found: " + e.toString());
-            writeOnFile("",context,Context.MODE_PRIVATE, FILE_NAME);
+            write();
             Log.i("BaseFragment", "File created");
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());
         }
-        return ret;
+        return data;
     }
 
-    public List<T> loadData(Context context, String FILE_NAME){
-        String data = readFile(context, FILE_NAME);
+    public void write(){
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(FILE_NAME, contextMode));
+            outputStreamWriter.write(text);
+            outputStreamWriter.close();
+        } catch (IOException e) {
+            Log.e("Error", e.toString());
+        }
+    }
+
+    public void load(){
+        String data = read();
         List<T> list =new ArrayList<>();
         if (!data.equals("")){
             StringTokenizer tokenizer = new StringTokenizer(data,";");
@@ -89,8 +90,16 @@ public abstract class BaseFragment<T> extends Fragment {
                 list.add( applyDataOnTheScreen(productToken));
             }
         }
-        return (list.size()>0) ? list : null;
+        items = (list.size()>0) ? list : null;
     }
 
-    public abstract T applyDataOnTheScreen(String productToken);
+    public abstract T applyDataOnTheScreen(String productTocker);
+
+    public List<T> getItems() {
+        return items;
+    }
+
+    public void setItems(List<T> items) {
+        this.items = items;
+    }
 }

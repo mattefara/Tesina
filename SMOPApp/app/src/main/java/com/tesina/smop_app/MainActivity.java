@@ -23,17 +23,27 @@ import android.widget.TextView;
 import com.google.android.gms.signin.SignIn;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.tesina.smop_app.Account.UserInformations;
 import com.tesina.smop_app.Account.UserSingIn;
 import com.tesina.smop_app.Shopping.ShoppingCart;
 import com.tesina.smop_app.Shopping.ShoppingList;
 import com.tesina.smop_app.Tabs.ScannedList;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private final int DEFAULT_ACTIVITY = R.layout.fragment_shopping_list;
     private int currentActivity;
-    private FirebaseAuth auth;
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private DatabaseReference userInformarionReference;
 
     Context context;
 
@@ -47,7 +57,6 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(context, UserSingIn.class));
             finish();
         } else {
-            auth = FirebaseAuth.getInstance();
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,startCurrentActivity()).commit();
         }
 
@@ -63,7 +72,17 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        if (auth.getCurrentUser() != null){
+            TextView displayName = headerView.findViewById(R.id.display_name);
+            TextView displayEmail = headerView.findViewById(R.id.display_email);
+            setUserInfo(displayName,displayEmail);
+
+
+        }
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -101,7 +120,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -137,5 +155,25 @@ public class MainActivity extends AppCompatActivity
                 return new ShoppingList();
             }
         }
+    }
+
+    public void setUserInfo(final TextView displayName, final TextView displayEmail) {
+        String path = "users/" + auth.getCurrentUser().getUid()+"/info";
+        userInformarionReference = FirebaseDatabase.getInstance().getReference(path);
+        userInformarionReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    displayEmail.setText(auth.getCurrentUser().getEmail());
+                    UserInformations info = dataSnapshot.getValue(UserInformations.class);
+                    displayName.setText(info.getDisplayName());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

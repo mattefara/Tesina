@@ -24,10 +24,10 @@ import com.tesina.smop_app.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScannedList extends BaseFragment {
+public class ScannedList extends BaseFragment<DatabaseProduct> {
 
     View view;
-    RecyclerView scannedList;
+    private RecyclerView scannedList;
     Context context;
 
     @Nullable
@@ -50,4 +50,16 @@ public class ScannedList extends BaseFragment {
         return view;
     }
 
+    public RecyclerView getScannedList() {
+        return scannedList;
+    }
+
+    public void setScannedList(RecyclerView scannedList) {
+        this.scannedList = scannedList;
+    }
+
+    @Override
+    public DatabaseProduct applyDataOnTheScreen(String productToken) {
+        return null;
+    }
 }

@@ -16,7 +16,6 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder implemen
         itemView.setOnLongClickListener(this);
     }
 
-
     public void setItemClick(RecyclerItemClick itemClick) {
         this.itemClick = itemClick;
     }

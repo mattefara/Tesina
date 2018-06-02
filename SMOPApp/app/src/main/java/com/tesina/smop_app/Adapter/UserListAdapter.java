@@ -16,10 +16,12 @@ import com.tesina.smop_app.Interfaces.MenuListener;
 import com.tesina.smop_app.Interfaces.RecyclerItemClick;
 import com.tesina.smop_app.Product.UserProduct;
 import com.tesina.smop_app.R;
+import com.tesina.smop_app.Threads.UserProductThread;
 import com.tesina.smop_app.ViewHolder.UserViewHolder;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.zip.Inflater;
 
 public class UserListAdapter extends BaseListAdapter<UserProduct,UserViewHolder> {
 
@@ -27,10 +29,11 @@ public class UserListAdapter extends BaseListAdapter<UserProduct,UserViewHolder>
     MenuItem menuItem;
     private final int LAYOUT = R.layout.user_product;
 
-    public UserListAdapter(Context context, LayoutInflater inflater) {
-        super(context);
+    public UserListAdapter(Context context, String FILE_NAME, LayoutInflater inflater) {
+        super(context, FILE_NAME);
         this.inflater = inflater;
     }
+
 
     @Override
     public void sort() {
@@ -123,6 +126,8 @@ public class UserListAdapter extends BaseListAdapter<UserProduct,UserViewHolder>
             getList().get(position).setName(newName);
             getList().get(position).setQuantity(newQuantity);
         }
+        UserProductThread productThread = new UserProductThread(getContext(),FILE_NAME, UserProductThread.MODE_WRITE , this.toString(), Context.MODE_PRIVATE );
+        productThread.start();
         notifyDataSetChanged();
     }
 
