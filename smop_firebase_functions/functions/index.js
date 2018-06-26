@@ -1,4 +1,4 @@
-  const functions = require('firebase-functions');
+const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
@@ -35,7 +35,22 @@ exports.like = functions.https.onCall((data, context) => {
   return x;
 })
 
+exports.addProduct = functions.https.onRequest((request,response) => {
+  
+  console.log("Request -> ", request.message)
+  //admin.database().ref("products").set();
+  response.send("Prodotto aggiunto");
+})
+
+exports.addDateToRentedShoppingCart = functions.database.ref("/rentedCarts")
+  .onUpdate((snapshot, context) => {
+    const value = snapshot.val();
+    console.log("created rentedCarts with vallue of " + value);
+  })
+
+/*
 exports.hourly_job =
   functions.pubsub.topic('hourly-tick').onPublish((event) => {
     console.log("This job is ran every hour!")
   });
+*/

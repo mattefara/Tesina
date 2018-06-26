@@ -31,6 +31,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     })
 
+    $(".send").click(function(){
+      pr = {
+        name:  $("#name").val(),
+        brand: $("#brand").val(),
+        barcode: $("#barcode").val(),
+        price: parseFloat($("#price").val()),
+        ingredients: $("#ingredients").val(),
+        discount: parseFloat($("#discount").val()),
+        description: $("#description").val()
+      }
+
+      firebase.database().ref("products/" + pr.barcode).set(pr)
+
+      console.log(pr)
+      
+    })
+
 
     firebase.auth().onAuthStateChanged(function(user) {
       console.log(user);
@@ -44,18 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
         var providerData = user.providerData;
-        console.log(uid)
-        firebase.database().ref('products/671860013624').set({
-          barcode: "671860013624",
-          branding: "Una marca buona",
-          description: "Lorem ipsum dolor est....",
-          discount: 3,
-          ingredients: "Qualche ingradiente segreto",
-          price: 4,
-          productName: "Manzo"
-        }).catch(function(error){
-          alert("TU \nNON \nPUOI \nSCRIVERE!!!")
-        })
 
         // ...
       } else {

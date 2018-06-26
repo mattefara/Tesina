@@ -5,17 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome to Firebase Hosting</title>
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/4.13.0/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/4.13.0/firebase-auth.js"></script>
-    <script defer src="/__/firebase/4.13.0/firebase-database.js"></script>
-    <script defer src="/__/firebase/4.13.0/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/4.13.0/firebase-storage.js"></script>
-    <!-- initialize the SDK after all desired features are loaded -->
-    <script defer src="/__/firebase/init.js"></script>
-    <!-- JQuery library-->
+      <!-- Firebase App is always required and must be first -->
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
+    
+
+
+    <!-- Add additional services you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-functions.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        var config = {
+        apiKey: "AIzaSyBYV0kVZfaaupIuomcu2DAS2kH_xkg0-Xs",
+        authDomain: "smop-database-ca8b7.firebaseapp.com",
+        databaseURL: "https://smop-database-ca8b7.firebaseio.com",
+        projectId: "smop-database-ca8b7",
+        //storageBucket: "<BUCKET>.appspot.com",
+        //messagingSenderId: "<SENDER_ID>",
+        };
+        firebase.initializeApp(config);
+      </script>
   </head>
   <body>
     <div id="login_form">
@@ -23,6 +35,16 @@
       <input id="password" type="password">
       <button id="login">Login</button>
     </div>
+
+    <p> Codice a barre: <input type="text" id="barcode"></p>
+    <p> Marca: <input type="text" id="brand"></p>
+    <p> Descrizione: <input type="text" id="description"></p>
+    <p> Sconto: <input type="text" id="discount"></p>
+    <p> Ingredienti: <input type="text" id="ingredients"></p>
+    <p> Prezzo: <input type="text" id="price"></p>
+    <p> Nome: <input type="text" id="name"></p>
+    <input type="button" class="send" value="Aggiungi">
+
 
     <script src="scripts/index.js"> </script>
   </body>
