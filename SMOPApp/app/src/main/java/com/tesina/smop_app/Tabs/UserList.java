@@ -39,13 +39,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class UserList extends BaseFragment<UserProduct> implements MenuListener {
+import static com.tesina.smop_app.MainActivity.USER_LIST_FILE_NAME;
 
-    private static final String USER_LIST_FILE_NAME = "user_list.csv";
+public class UserList extends Fragment{
+
     View view;
     RecyclerView userList;
     Context context;
-    MenuItem deleteSelectedItems;
     UserListAdapter userListAdapter;
 
     @Nullable
@@ -55,14 +55,11 @@ public class UserList extends BaseFragment<UserProduct> implements MenuListener 
 
         context = getActivity();
 
-
         userList = view.findViewById(R.id.user_list);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         userList.setLayoutManager(layoutManager);
-        userListAdapter = new UserListAdapter(context,USER_LIST_FILE_NAME,inflater);
-        userList.setAdapter(userListAdapter);
-        userListAdapter.setMenuListener(this);
+
 
         UserProductThread productThread = new UserProductThread(context, USER_LIST_FILE_NAME, UserProductThread.MODE_LOAD);
         productThread.start();
@@ -73,22 +70,16 @@ public class UserList extends BaseFragment<UserProduct> implements MenuListener 
         }
         List<UserProduct> p = productThread.getItems();
 
-        //List<UserProduct> p = loadData(context,USER_LIST_FILE_NAME);
+        userListAdapter = new UserListAdapter(context, p, getLayoutInflater());
+        userList.setAdapter(userListAdapter);
 
         if ( p != null){
             userListAdapter.setItemsList(p);
-            userListAdapter.notifyDataSetChanged();
         } else {
             ConstraintLayout emptyListContainer = view.findViewById(R.id.container_empty_list);
             emptyListContainer.setVisibility(View.VISIBLE);
-            /*
-            TODO: ADD EMPTY LIST IMAGE
-             */
         }
 
-
-
-        setHasOptionsMenu(true);
         return view;
     }
 
@@ -96,36 +87,12 @@ public class UserList extends BaseFragment<UserProduct> implements MenuListener 
         return this.userList;
     }
 
-    @Override
-    public void setMenuItemVisible(boolean isVisible) {
-        deleteSelectedItems.setVisible(isVisible);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        deleteSelectedItems = menu.findItem(R.id.delete_selected);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id){
-            case R.id.delete_selected : {
-                userListAdapter.deleteItems();
-                break;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
+    /*@Override
     public UserProduct applyDataOnTheScreen(String productToken) {
         StringTokenizer productFields = new StringTokenizer(productToken,",");
         String name = productFields.nextToken();
         int quantity = Integer.parseInt(productFields.nextToken());
 
         return new UserProduct(name,quantity);
-    }
+    }*/
 }

@@ -21,10 +21,18 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tesina.smop_app.Interfaces.BackListener;
+import com.tesina.smop_app.Product.DatabaseProduct;
 import com.tesina.smop_app.R;
+import com.tesina.smop_app.Threads.DatabaseProductThread;
 
 import java.io.IOException;
+
+import static com.tesina.smop_app.MainActivity.SCANNED_LIST_FILE_NAME;
 
 public class CameraScanner extends Activity {
     Context context;
@@ -95,7 +103,7 @@ public class CameraScanner extends Activity {
                 if (barcodes.size() > 0) {
                     Intent intent = new Intent();
                     String barcode = barcodes.valueAt(0).displayValue;
-                    intent.putExtra("Barcode", barcode);
+                    intent.putExtra("barcode",barcode);
                     setResult(RESULT_OK, intent);
                     finish();
                 }

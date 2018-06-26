@@ -4,32 +4,32 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item android:title="Shop">
+        <item android:title="@string/menu_shop_title">
             <menu>
                 <item
                     android:id="@+id/make_your_list"
                     android:icon="@drawable/ic_shopping_basket"
-                    android:title="Make your list" />
+                    android:title="@string/make_your_list" />
                 <item
                     android:id="@+id/connect_to_shopping_cart"
                     android:icon="@drawable/ic_shopping_cart"
-                    android:title="Connect to your shopping cart"/>
+                    android:title="@string/connect_to_your_shopping_cart"/>
             </menu>
         </item>
 
     </group>
 
     <group android:checkableBehavior="single">
-        <item android:title="Options">
+        <item android:title="@string/options">
             <menu>
                 <item
                     android:id="@+id/settings"
                     android:icon="@drawable/ic_settings"
-                    android:title="Settings" />
+                    android:title="@string/settings" />
                 <item
                     android:id="@+id/log_out"
                     android:icon="@drawable/ic_exit_to_app"
-                    android:title="Logout" />
+                    android:title="@string/logout" />
             </menu>
         </item>
 

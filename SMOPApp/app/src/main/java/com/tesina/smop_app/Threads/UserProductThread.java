@@ -28,15 +28,15 @@ public class UserProductThread extends OperationOnFile<UserProduct>{
         this.mode = mode;
     }
 
-    public UserProductThread(Context context, String FILE_NAME, int mode, String text, int contextMode) {
-        super(context, FILE_NAME, text, contextMode);
+    public UserProductThread(Context context, String FILE_NAME, int mode, String text) {
+        super(context, FILE_NAME, text);
         this.mode = mode;
     }
 
 
     @Override
     public void run() {
-        Log.i("Thread manager", "start");
+        Log.i("UserProduct Thread", "start");
         switch (mode){
             case MODE_READ:{
                 read();

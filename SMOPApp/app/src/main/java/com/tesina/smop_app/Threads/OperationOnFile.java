@@ -15,27 +15,22 @@ import java.util.StringTokenizer;
 
 public abstract class OperationOnFile<T> extends Thread {
 
-    private List<T> items;
+    private List<T> items = new ArrayList<>();
 
     Context context;
-    int mode;
-    int contextMode;
     String text;
     public final String FILE_NAME;
 
     public OperationOnFile(Context context, String FILE_NAME){
         this.context = context;
         this.FILE_NAME = FILE_NAME;
-        this.items = new ArrayList<>();
         this.text = "";
     }
 
-    public OperationOnFile(Context context, String FILE_NAME, String text, int contextMode){
+    public OperationOnFile(Context context, String FILE_NAME, String text){
         this.context = context;
         this.FILE_NAME = FILE_NAME;
         this.text = text;
-        this.contextMode = contextMode;
-        this.items = new ArrayList<>();
     }
 
 
@@ -71,7 +66,7 @@ public abstract class OperationOnFile<T> extends Thread {
 
     public void write(){
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(FILE_NAME, contextMode));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE));
             outputStreamWriter.write(text);
             outputStreamWriter.close();
         } catch (IOException e) {
@@ -90,7 +85,7 @@ public abstract class OperationOnFile<T> extends Thread {
                 list.add( applyDataOnTheScreen(productToken));
             }
         }
-        items = (list.size()>0) ? list : null;
+        items = (list.size()>0) ? list : new ArrayList<T>();
     }
 
     public abstract T applyDataOnTheScreen(String productTocker);

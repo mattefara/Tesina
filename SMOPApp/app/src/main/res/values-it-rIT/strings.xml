@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMOP-App</string>
+    <string name="navigation_drawer_open">Apri la barra di navigazione</string>
+    <string name="navigation_drawer_close">Chiudi la barra di navigazione</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="action_sign_in">Registrati</string>
+    <string name="sign_up">Non hai un account?</string>
+    <string name="error_invalid_password">Questa password è troppo corta</string>
+    <string name="error_invalid_email">Questa email non è valida</string>
+    <string name="error_login_email">Questo account non esiste</string>
+    <string name="error_login">Questa password non è corretta</string>
+    <string name="user_name">Nome</string>
+    <string name="user_last_name">Cognome</string>
+    <string name="confirm_password">Conferma la password</string>
+    <string name="action_sign_up">Entra</string>
+    <string name="email_already_used">Questa mail è già stata utilizzata</string>
+    <string name="error_invalid_name">Il nome è vuoto o è troppo lungo</string>
+    <string name="error_invalid_lastname">Il cognome è vuoto o troppo lungo</string>
+    <string name="error_passwrd_not_equal">Le password non corrispondono o il campo è vuoto</string>
+    <string name="not_empty_field">Questo campo non può essere vuoto</string>
+    <string name="emply_list">Per favore, aggiungi nuovi contenuti…</string>
+    <string name="no_product_found">Prodotto non trovato</string>
+    <string name="delete_selected_items">Cancella i prodotti selezionati</string>
+    <string name="brand">Marca:</string>
+    <string name="ingredient">Ingredinti:</string>
+    <string name="barcode">Codice:</string>
+    <string name="discount">% di sconto.</string>
+    <string name="description">"Descrizione: "</string>
+    <string name="product_name">Nome del prodotto</string>
+    <string name="menu_shop_title">Compra</string>
+    <string name="make_your_list">Fai la tua lista</string>
+    <string name="connect_to_your_shopping_cart">Connettiti con il carrello</string>
+    <string name="options">Opzioni</string>
+    <string name="settings">Impostazioni</string>
+    <string name="logout">Esci</string>
+    <string name="user_list">La tua lista</string>
+    <string name="scanned_list">Scannerizza</string>
+    <string name="new_product_dialog">Inserisci un nuovo prodotto</string>
+    <string name="edit_product_dialog">Modifica il tuo prodotto</string>
+</resources>

@@ -6,30 +6,18 @@ import android.widget.TextView;
 
 import com.tesina.smop_app.Interfaces.RecyclerItemClick;
 
-public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder{
 
-    private RecyclerItemClick itemClick;
 
     public BaseViewHolder(View itemView) {
         super(itemView);
-        itemView.setOnClickListener(this);
-        itemView.setOnLongClickListener(this);
     }
 
-    public void setItemClick(RecyclerItemClick itemClick) {
-        this.itemClick = itemClick;
-    }
 
-    @Override
-    public void onClick(View view) {
-        itemClick.Onclick(view, getAdapterPosition(), false);
-    }
 
-    @Override
-    public boolean onLongClick(View view) {
-        itemClick.Onclick(view, getAdapterPosition(), true);
-        return true;
-    }
+    /*
+        ABSTRACT METHODS
+     */
 
     public abstract void bind(T item);
 }

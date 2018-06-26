@@ -40,6 +40,9 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String SCANNED_LIST_FILE_NAME = "scanned_list.csv";
+    public static final String USER_LIST_FILE_NAME = "user_list.csv";
+
     private final int DEFAULT_ACTIVITY = R.layout.fragment_shopping_list;
     private int currentActivity;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -68,8 +71,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         context = getApplicationContext();
-
-
 
 
 

@@ -2,6 +2,7 @@ package com.tesina.smop_app.Shopping;
 
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,7 +21,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,18 +46,21 @@ import com.tesina.smop_app.R;
 import com.tesina.smop_app.Tabs.BaseFragment;
 import com.tesina.smop_app.Tabs.ScannedList;
 import com.tesina.smop_app.Tabs.UserList;
+import com.tesina.smop_app.Threads.DatabaseProductThread;
 import com.tesina.smop_app.Threads.UserProductThread;
 
 import java.util.List;
 import java.util.StringTokenizer;
 
 import static android.app.Activity.RESULT_OK;
+import static com.tesina.smop_app.MainActivity.SCANNED_LIST_FILE_NAME;
+import static com.tesina.smop_app.MainActivity.USER_LIST_FILE_NAME;
 
-public class ShoppingList extends BaseFragment<DatabaseProduct> {
+public class ShoppingList extends android.support.v4.app.Fragment {
 
     //TODO: ADD DATABASEPRODUCT TO RECYCLERVIEW
 
-    View view;
+    View fragmentView;
     Context context;
     FloatingActionButton actionListButton;
     ViewPager viewPager;
@@ -66,8 +73,6 @@ public class ShoppingList extends BaseFragment<DatabaseProduct> {
     TabLayout tabLayout;
     DatabaseReference productReference = FirebaseDatabase.getInstance().getReference("products");
     private MenuItem deleteSelectedItems;
-    private final String USER_LIST_FILE_NAME = "user_list.csv";
-    private final String SCANNED_LIST_FILE_NAME = "scanned_list.csv";
     private final int CAMERA_REQUEST_CODE = 1;
 
 
@@ -86,30 +91,18 @@ public class ShoppingList extends BaseFragment<DatabaseProduct> {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_shopping_list,container,false);
+        fragmentView = inflater.inflate(R.layout.fragment_shopping_list,container,false);
         //Add toolbar
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        Toolbar toolbar = fragmentView.findViewById(R.id.toolbar);
         ((AppCompatActivity)context).setSupportActionBar(toolbar);
 
-        rootGroup = container.getRootView();
-        fragmentInflater = inflater;
-        //Add toolbar
-        DrawerLayout drawer = rootGroup.findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                (AppCompatActivity)context, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-
-
-        viewPager = view.findViewById(R.id.fragment_tab);
-
+        viewPager = fragmentView.findViewById(R.id.fragment_tab);
         setupViewPager(viewPager);
 
-        tabLayout = view.findViewById(R.id.shop_tab);
+        tabLayout = fragmentView.findViewById(R.id.shop_tab);
         tabLayout.setupWithViewPager(viewPager);
 
-        actionListButton = view.findViewById(R.id.list_action);
+        actionListButton = fragmentView.findViewById(R.id.list_action);
         actionListButton.setOnClickListener(actionListButtonClickListener());
         //Change image between add and camera
         setTabIconChange(tabLayout);
@@ -123,18 +116,17 @@ public class ShoppingList extends BaseFragment<DatabaseProduct> {
             editor.apply();
         }
 
-        //List<DatabaseProduct> data = loadData(context, SCANNED_LIST_FILE_NAME);
 
-        return view;
+        return fragmentView;
     }
 
 
     private void setupViewPager(ViewPager viewPager){
         TabAdapter tabAdapter = new TabAdapter(getChildFragmentManager());
         userList = new UserList();
-        tabAdapter.addFragment(userList, "List");
+        tabAdapter.addFragment(userList, getString(R.string.user_list));
         scannedList = new ScannedList();
-        tabAdapter.addFragment(scannedList, "Scan list");
+        tabAdapter.addFragment(scannedList, getString(R.string.scanned_list));
         viewPager.setAdapter(tabAdapter);
     }
 
@@ -151,6 +143,14 @@ public class ShoppingList extends BaseFragment<DatabaseProduct> {
                     case 1: {
                         actionListButton.setImageResource(R.drawable.ic_menu_camera);
                         actionListButton.setOnClickListener(actionScannedListButtonClickListener());
+
+                        if (userList.getUserList() != null) {
+                            UserListAdapter adapter = (UserListAdapter) userList.getUserList().getAdapter();
+                            if (adapter.getActionMode() != null) {
+                                adapter.getActionMode().finish();
+                            }
+                        }
+
                         break;
                     }
                 }
@@ -174,9 +174,9 @@ public class ShoppingList extends BaseFragment<DatabaseProduct> {
     public View.OnClickListener actionListButtonClickListener(){
         return new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 final UserItemDialog dialog = new UserItemDialog(context,getLayoutInflater());
-                dialog.buildDialog("Enter a new product", new DialogInterface.OnClickListener() {
+                dialog.buildDialog(getString(R.string.new_product_dialog), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -187,22 +187,21 @@ public class ShoppingList extends BaseFragment<DatabaseProduct> {
                                 Integer.parseInt(dialog.productQuantity.getText().toString())
                         );
 
-                        List<UserProduct> userProducts = userListAdapter.getList();
+                        List<UserProduct> userProducts = userListAdapter.getItemsList();
                         int index ;
-                        if ((index = userListAdapter.indexOf(userProduct)) != -1){
+                        if ((index = userProducts.indexOf(userProduct)) != -1){
                             userProducts.get(index).setQuantity(userProducts.get(index).getQuantity() + userProduct.getQuantity() );
                         } else {
-                            userListAdapter.setItemList(userProduct);
+                            userListAdapter.addItem(userProduct);
                         }
-                        userListAdapter.sort();
-                        UserProductThread productThread = new UserProductThread(context,USER_LIST_FILE_NAME, UserProductThread.MODE_WRITE , userListAdapter.toString(), Context.MODE_PRIVATE );
+
+                        //Writing On File
+                        UserProductThread productThread = new UserProductThread(context,USER_LIST_FILE_NAME, UserProductThread.MODE_WRITE , userListAdapter.toString() );
                         productThread.start();
-                        //writeOnFile(userListAdapter.toString(),context,Context.MODE_PRIVATE, USER_LIST_FILE_NAME);
-                        userListAdapter.notifyDataSetChanged();
 
 
-                        if (userListAdapter.getList().size() == 1){
-                            ConstraintLayout emptyListContainer = rootGroup.findViewById(R.id.container_empty_list);
+                        if (userListAdapter.getItemCount() == 1){
+                            ConstraintLayout emptyListContainer = fragmentView.findViewById(R.id.container_empty_list);
                             emptyListContainer.setVisibility(View.GONE);
                         }
 
@@ -216,8 +215,8 @@ public class ShoppingList extends BaseFragment<DatabaseProduct> {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkForPermissions();
                 scannedListAdapter = (ScannedListAdapter) scannedList.getScannedList().getAdapter();
+                checkForPermissions();
             }
         };
     }
@@ -258,10 +257,10 @@ public class ShoppingList extends BaseFragment<DatabaseProduct> {
                 editor.putBoolean("selected",true);
                 editor.apply();
                 if (resultCode == RESULT_OK){
-                    String barcode = data.getExtras().getString("Barcode");
-                    String fakeBarcode = "725272730706";
-                    makeQueryForProduct(fakeBarcode);
-                    Toast.makeText(context, "Barcode: " + barcode, Toast.LENGTH_SHORT ).show();
+                    String barcode = data.getExtras().getString("barcode");
+                    //String fakeBarcode = "725272730706";
+                    makeQueryForProduct(barcode);
+
                 }
             }
         }
@@ -269,11 +268,32 @@ public class ShoppingList extends BaseFragment<DatabaseProduct> {
     }
 
     private void makeQueryForProduct(final String barcode) {
-        productReference.orderByChild("barcode").equalTo(barcode).addListenerForSingleValueEvent(new ValueEventListener() {
+        productReference.child(barcode).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     DatabaseProduct product = dataSnapshot.getValue(DatabaseProduct.class);
+                    product.setQuantity(1);
+                    if (scannedListAdapter != null){
+                        int index;
+
+
+                        if ((index = scannedListAdapter.indexOf(product.getName())) != -1){
+                            scannedListAdapter.getItemsList().get(index).setQuantity( scannedListAdapter.getItemsList().get(index).getQuantity() + 1);
+                        } else {
+                            scannedListAdapter.addItem(product);
+                        }
+                        Log.i("Thread writer start", scannedListAdapter.toString());
+                        DatabaseProductThread thread = new DatabaseProductThread(context,SCANNED_LIST_FILE_NAME,DatabaseProductThread.MODE_WRITE,scannedListAdapter.toString());
+                        thread.start();
+                        try {
+                            thread.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    //scannedListAdapter.addItem(product);
                 } else {
                     Toast.makeText(context,getString(R.string.no_product_found), Toast.LENGTH_SHORT).show();
                 }
@@ -287,20 +307,4 @@ public class ShoppingList extends BaseFragment<DatabaseProduct> {
         });
     }
 
-    @Override
-    public DatabaseProduct applyDataOnTheScreen(String productToken) {
-        StringTokenizer productFields = new StringTokenizer(productToken,",");
-        String name = productFields.nextToken();
-        int quantity = Integer.parseInt(productFields.nextToken());
-        double price = Double.parseDouble(productFields.nextToken());
-        double discount = Double.parseDouble(productFields.nextToken());
-        int img = Integer.parseInt(productFields.nextToken());
-        String description = productFields.nextToken();
-        String ingredient = productFields.nextToken();
-        String brand = productFields.nextToken();
-        String barcode = productFields.nextToken();
-
-
-        return new DatabaseProduct(name,quantity,price,discount,img,description,ingredient,brand,barcode);
-    }
 }

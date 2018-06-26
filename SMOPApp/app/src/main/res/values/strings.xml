@@ -2,12 +2,12 @@
     <string name="app_name">SMOP-App</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
+    <string name="prompt_email" translatable="false">Email</string>
+    <string name="prompt_password" translatable="false">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="sign_up">Don\'t have an account?</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -22,8 +22,25 @@
     <string name="error_invalid_name">Name is empty or too long</string>
     <string name="error_invalid_lastname">Last name is empty or too long</string>
     <string name="error_passwrd_not_equal">Passwrod doesn\'t correspond or are empty</string>
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="not_empty_field">This field can\'t be empty</string>
     <string name="emply_list">Please add some new contents. \nUse the \'+\' button.</string>
     <string name="no_product_found">Product non found</string>
+    <string name="delete_selected_items">Delete selected items</string>
+    <string name="brand">Brand:</string>
+    <string name="ingredient">Ingredients: </string>
+    <string name="barcode">Barcode: </string>
+    <string name="discount">% of discount.</string>
+    <string name="description">Description: </string>
+    <string name="product_name">Product name</string>
+    <string name="menu_shop_title">Shop</string>
+    <string name="make_your_list">Make your list</string>
+    <string name="connect_to_your_shopping_cart">Connect to your shopping cart</string>
+    <string name="options">Options</string>
+    <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
+    <string name="user_list">List</string>
+    <string name="scanned_list">Scan list</string>
+    <string name="new_product_dialog">Enter a new product</string>
+    <string name="edit_product_dialog">Edit your product</string>
 </resources>
